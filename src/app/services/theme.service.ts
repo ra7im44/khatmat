@@ -19,7 +19,9 @@ export class ThemeService {
         // Apply theme whenever signal changes
         effect(() => {
             const isDark = this.isDarkMode();
-            document.documentElement.classList.toggle('dark', isDark);
+            if (typeof document !== 'undefined' && document.documentElement) {
+                document.documentElement.classList.toggle('dark', isDark);
+            }
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
         });
     }
