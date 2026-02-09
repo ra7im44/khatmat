@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="utf-8" />
+  <title>منصة ختمات — صدقة جارية</title>
+  <meta name="description" content="أنشئ ختمة قرآنية جماعية وأهدِ ثوابها لمن تحب. صدقة جارية لأمواتنا." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            bg: 'var(--bg)',
+            surface: 'var(--surface)',
+            'surface-el': 'var(--surface-el)',
+            txt: 'var(--text)',
+            'txt-secondary': 'var(--text-secondary)',
+            'txt-muted': 'var(--text-muted)',
+            link: 'var(--link)',
+            brd: 'var(--border)',
+            'input-bg': 'var(--input-bg)',
+            'input-brd': 'var(--input-border)',
+            focus: 'var(--focus)',
+            primary: {
+              DEFAULT: 'var(--primary)',
+              hover: 'var(--primary-hover)',
+              text: 'var(--primary-text)',
+            },
+            ok: 'var(--success)',
+            warn: 'var(--warning)',
+            err: 'var(--error)',
+            nfo: 'var(--info)',
+          },
+          fontFamily: {
+            sans: ['Cairo', 'sans-serif'],
+            quran: ['Amiri', 'serif'],
+          },
+          animation: {
+            float: 'float 6s ease-in-out infinite',
+            shine: 'shine 1.5s linear infinite',
+            'slide-up': 'slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
+            'fade-in': 'fadeIn 0.5s ease-out',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-12px)' },
+            },
+            shine: {
+              '0%': { transform: 'translateX(-100%)' },
+              '100%': { transform: 'translateX(100%)' },
+            },
+            slideUp: {
+              '0%': { transform: 'translateY(20px)', opacity: 0 },
+              '100%': { transform: 'translateY(0)', opacity: 1 },
+            },
+            fadeIn: {
+              '0%': { opacity: 0 },
+              '100%': { opacity: 1 },
+            },
+          },
+        },
+      },
+    }
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+  <app-root></app-root>
+</body>
+
+</html>
