@@ -22,7 +22,7 @@
     "@modelcontextprotocol/sdk": "^1.26.0",
     "rxjs": "^7.8.2",
     "tailwindcss": "latest",
-    "zone.js": "^0.16.0"
+    "zone.js": "~0.15.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
