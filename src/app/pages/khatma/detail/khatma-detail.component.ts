@@ -34,9 +34,6 @@ import { KhatmaService } from '../../../services/khatma.service';
               
               <!-- Stats Badge -->
               <div class="absolute top-8 left-8 flex items-center gap-3">
-                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-black text-xl shadow-lg shadow-primary/30 animate-pulse-glow">
-                  {{k.progress}}%
-                </div>
                 @if (k.status === 'completed') {
                   <div class="px-4 py-2 rounded-full bg-ok/10 border border-ok/30 text-ok text-sm font-bold flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
