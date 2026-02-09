@@ -21,3 +21,6 @@ Thumbs.db
 .env
 .env.local
 src/environments/environment.ts
+
+.vercel
+.env*.local

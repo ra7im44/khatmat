@@ -38,7 +38,7 @@ interface ChatMessage {
           </div>
           <div>
             <h1 class="text-lg font-black text-txt">المصحّح القرآني</h1>
-            <p class="text-[10px] font-bold text-ok flex items-center gap-1"><span class="w-1.5 h-1.5 bg-ok rounded-full animate-pulse"></span> Gemini AI</p>
+            <p class="text-[10px] font-bold text-ok flex items-center gap-1"><span class="w-1.5 h-1.5 bg-ok rounded-full animate-pulse"></span> متصل</p>
           </div>
         </div>
         <button (click)="messages.set([])" class="w-9 h-9 rounded-xl hover:bg-surface-el flex items-center justify-center text-txt-muted transition-colors" title="مسح">
