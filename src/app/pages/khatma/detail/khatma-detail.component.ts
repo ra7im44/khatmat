@@ -35,7 +35,7 @@ import { KhatmaService } from '../../../services/khatma.service';
               <!-- Stats Badge -->
               <div class="absolute top-8 left-8 flex items-center gap-3">
                 @if (k.status === 'completed') {
-                  <div class="px-4 py-2 rounded-full bg-ok/10 border border-ok/30 text-ok text-sm font-bold flex items-center gap-2">
+                  <div class="px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 text-sm font-bold flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     مكتملة
                   </div>
@@ -55,9 +55,12 @@ import { KhatmaService } from '../../../services/khatma.service';
                   </div>
                   @if (k.deceasedName) {
                     <div class="h-8 w-px bg-brd"></div>
-                    <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-warn/[0.07] border border-warn/15 text-warn">
-                      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
-                      <span class="font-bold">{{k.deceasedName}}</span>
+                    <div>
+                      <div class="text-[10px] text-txt-muted font-bold uppercase tracking-wider mb-0.5">عن روح المرحوم</div>
+                      <div class="flex items-center gap-1.5 text-amber-500">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+                        <span class="text-sm font-bold">{{k.deceasedName}}</span>
+                      </div>
                     </div>
                   }
                 </div>
@@ -131,7 +134,7 @@ import { KhatmaService } from '../../../services/khatma.service';
                   
                   <!-- Background Gradient Overlay -->
                   <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                    [class]="part.status === 'completed' ? 'bg-gradient-to-br from-ok/10 to-ok/5' : part.status === 'reserved' ? 'bg-gradient-to-br from-warn/10 to-warn/5' : 'bg-gradient-to-br from-primary/10 to-primary/5'"></div>
+                    [class]="part.status === 'completed' ? 'bg-gradient-to-br from-emerald-500/10 to-emerald-500/5' : part.status === 'reserved' ? 'bg-gradient-to-br from-amber-500/10 to-amber-500/5' : 'bg-gradient-to-br from-primary/10 to-primary/5'"></div>
 
                   <div class="relative z-10">
                     <div class="text-[10px] font-bold opacity-60 mb-2">الجزء {{part.juzNumber}}</div>
@@ -139,14 +142,14 @@ import { KhatmaService } from '../../../services/khatma.service';
                     
                     <!-- Surahs Info -->
                     @if (part.status === 'completed' && part.readSurahs && part.readSurahs.length > 0) {
-                      <div class="text-[9px] text-ok/80 mb-2 px-1 line-clamp-2">{{part.readSurahs.join(' • ')}}</div>
+                      <div class="text-[9px] text-emerald-500/80 mb-2 px-1 line-clamp-2">{{part.readSurahs.join(' • ')}}</div>
                     } @else {
                       <div class="text-[9px] opacity-50 mb-2 px-1 line-clamp-2">{{khatmaService.getJuzSurahs(part.juzNumber).join(' • ')}}</div>
                     }
                     
                     <!-- Icon -->
                     <div class="w-8 h-8 mx-auto rounded-full flex items-center justify-center transition-transform group-hover:scale-110"
-                      [class]="part.status === 'completed' ? 'bg-ok/20' : part.status === 'reserved' ? 'bg-warn/20' : 'bg-primary/10'">
+                      [class]="part.status === 'completed' ? 'bg-emerald-500/20' : part.status === 'reserved' ? 'bg-amber-500/20' : 'bg-primary/10'">
                       <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                         @if (part.status === 'completed') {<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>}
                         @else if (part.status === 'reserved') {<path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/>}
@@ -155,7 +158,7 @@ import { KhatmaService } from '../../../services/khatma.service';
                     </div>
 
                     @if (part.completedBy) {
-                      <div class="text-[10px] text-ok font-bold mt-2">{{part.completedBy}}</div>
+                      <div class="text-[10px] text-emerald-500 font-bold mt-2">{{part.completedBy}}</div>
                     }
                   </div>
                 </button>
@@ -164,8 +167,8 @@ import { KhatmaService } from '../../../services/khatma.service';
 
             <!-- Legend -->
             <div class="flex flex-wrap gap-6 mt-8 justify-center">
-              <div class="flex items-center gap-2 text-sm"><div class="w-4 h-4 rounded-md bg-ok/20 border-2 border-ok/40"></div><span class="text-txt-muted font-medium">مكتمل</span></div>
-              <div class="flex items-center gap-2 text-sm"><div class="w-4 h-4 rounded-md bg-warn/20 border-2 border-warn/40"></div><span class="text-txt-muted font-medium">محجوز</span></div>
+              <div class="flex items-center gap-2 text-sm"><div class="w-4 h-4 rounded-md bg-emerald-500/20 border-2 border-emerald-500/40"></div><span class="text-txt-muted font-medium">مكتمل</span></div>
+              <div class="flex items-center gap-2 text-sm"><div class="w-4 h-4 rounded-md bg-amber-500/20 border-2 border-amber-500/40"></div><span class="text-txt-muted font-medium">محجوز</span></div>
               <div class="flex items-center gap-2 text-sm"><div class="w-4 h-4 rounded-md bg-surface-el border-2 border-brd"></div><span class="text-txt-muted font-medium">متاح</span></div>
             </div>
           </div>
@@ -225,7 +228,7 @@ import { KhatmaService } from '../../../services/khatma.service';
     <!-- COMPLETION MESSAGE MODAL -->
     @if (showCompletionMessage()) {
       <div class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4" (click)="showCompletionMessage.set(false)">
-        <div class="bg-gradient-to-br from-ok to-ok/90 rounded-[2.5rem] w-full max-w-lg p-10 shadow-2xl relative overflow-hidden animate-scale-in" (click)="$event.stopPropagation()">
+        <div class="bg-gradient-to-br from-emerald-500 to-emerald-500/90 rounded-[2.5rem] w-full max-w-lg p-10 shadow-2xl relative overflow-hidden animate-scale-in" (click)="$event.stopPropagation()">
           <!-- Decorative Elements -->
           <div class="absolute -top-20 -right-20 w-60 h-60 bg-white/10 rounded-full blur-3xl"></div>
           <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
@@ -246,7 +249,7 @@ import { KhatmaService } from '../../../services/khatma.service';
               <p class="text-xs mt-2 opacity-75">— رواه البخاري</p>
             </div>
 
-            <button (click)="showCompletionMessage.set(false)" class="px-8 py-3 bg-white text-ok rounded-2xl font-bold hover:scale-105 transition-all shadow-lg">
+            <button (click)="showCompletionMessage.set(false)" class="px-8 py-3 bg-white text-emerald-500 rounded-2xl font-bold hover:scale-105 transition-all shadow-lg">
               بارك الله فيك ✨
             </button>
           </div>
@@ -279,8 +282,8 @@ export class KhatmaDetailComponent {
   getStats(k: any) {
     return [
       { value: `${k.progress}%`, label: 'الإنجاز', color: 'text-primary' },
-      { value: this.getCompletedCount(k), label: 'مكتمل', color: 'text-ok' },
-      { value: this.getRemainingCount(k), label: 'متبقي', color: 'text-warn' }
+      { value: this.getCompletedCount(k), label: 'مكتمل', color: 'text-emerald-500' },
+      { value: this.getRemainingCount(k), label: 'متبقي', color: 'text-amber-500' }
     ];
   }
 
@@ -288,8 +291,8 @@ export class KhatmaDetailComponent {
   getRemainingCount(k: any) { return k.parts.filter((p: any) => p.status === 'available').length; }
 
   getPartClasses(part: any) {
-    if (part.status === 'completed') return 'bg-ok/10 border-ok/30 text-ok hover:bg-ok/15 hover:border-ok/40';
-    if (part.status === 'reserved') return 'bg-warn/10 border-warn/30 text-warn hover:bg-warn/15 hover:border-warn/40';
+    if (part.status === 'completed') return 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500 hover:bg-emerald-500/15 hover:border-emerald-500/40';
+    if (part.status === 'reserved') return 'bg-amber-500/10 border-amber-500/30 text-amber-500 hover:bg-amber-500/15 hover:border-amber-500/40';
     return 'bg-surface-el border-brd text-txt-muted hover:border-primary/40 hover:text-primary hover:bg-primary/[0.04]';
   }
 

@@ -78,7 +78,7 @@ import { KhatmaService } from '../../../services/khatma.service';
                   <div class="flex justify-end items-start mb-4">
                     @if (k.deceasedName) {
                       <div class="px-3 py-1.5 rounded-full bg-surface-el border border-brd text-[11px] font-bold text-txt-secondary flex items-center gap-1.5 shadow-sm">
-                        <span class="w-1.5 h-1.5 rounded-full bg-warn animate-pulse"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
                         عن: {{k.deceasedName}}
                       </div>
                     }
