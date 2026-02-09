@@ -1,5 +1,5 @@
 
-import { Component, inject, signal, computed } from '@angular/core';
+import { Component, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, FormsModule, Validators } from '@angular/forms';
@@ -9,6 +9,7 @@ import { KhatmaService } from '../../../services/khatma.service';
   selector: 'app-khatma-list',
   standalone: true,
   imports: [CommonModule, RouterLink, ReactiveFormsModule, FormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="min-h-screen pb-20 relative overflow-hidden">
       <!-- Background Decor -->
@@ -47,10 +48,10 @@ import { KhatmaService } from '../../../services/khatma.service';
           <div class="bg-surface/80 backdrop-blur-xl border border-brd p-2 rounded-2xl shadow-lg flex flex-col md:flex-row gap-2 max-w-3xl mx-auto">
             <div class="relative flex-1">
               <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-txt-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
-              <input [(ngModel)]="searchQuery" placeholder="ابحث عن ختمة، اسم المتوفى، أو المنشئ..." class="w-full h-12 pr-12 pl-4 bg-transparent text-txt placeholder:text-txt-muted/70 outline-none rounded-xl focus:bg-surface-el transition-colors font-medium"/>
+              <input [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" placeholder="ابحث عن ختمة، اسم المتوفى، أو المنشئ..." class="w-full h-12 pr-12 pl-4 bg-transparent text-txt placeholder:text-txt-muted/70 outline-none rounded-xl focus:bg-surface-el transition-colors font-medium"/>
             </div>
             <div class="flex gap-1 overflow-x-auto pb-1 md:pb-0 no-scrollbar">
-              @for (filter of filters; track filter.id) {
+              @for (filter of filters(); track filter.id) {
                 <button (click)="activeFilter.set(filter.id)"
                   [class]="activeFilter() === filter.id ? 'bg-txt text-bg shadow-md' : 'bg-surface-el text-txt-muted hover:text-txt hover:bg-surface-el/80'"
                   class="px-5 h-12 rounded-xl text-sm font-bold whitespace-nowrap transition-all duration-300 flex items-center gap-2">
@@ -76,7 +77,7 @@ import { KhatmaService } from '../../../services/khatma.service';
                   <!-- Top Row -->
                   <div class="flex justify-between items-start mb-6">
                     <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center text-primary font-black text-xl shadow-inner group-hover:scale-110 transition-transform duration-500">
-                      {{k.parts[0].status === 'completed' ? 'Reading' : k.progress + '%'}}
+                      {{k.progress}}%
                     </div>
                     @if (k.deceasedName) {
                       <div class="px-3 py-1.5 rounded-full bg-surface-el border border-brd text-[11px] font-bold text-txt-secondary flex items-center gap-1.5 shadow-sm">
@@ -125,7 +126,7 @@ import { KhatmaService } from '../../../services/khatma.service';
             </div>
             <h3 class="text-2xl font-black text-txt mb-2">لم يتم العثور على ختمات</h3>
             <p class="text-txt-muted max-w-xs mx-auto mb-8">جرب البحث بكلمات مختلفة أو قم بإنشاء ختمة جديدة</p>
-            <button (click)="searchQuery=''; activeFilter.set('all')" class="text-link font-bold hover:underline">مسح البحث</button>
+            <button (click)="searchQuery.set(''); activeFilter.set('all')" class="text-link font-bold hover:underline">مسح البحث</button>
           </div>
         }
 
@@ -190,7 +191,7 @@ export class KhatmaListComponent {
   khatmaService = inject(KhatmaService);
 
   showCreateModal = false;
-  searchQuery = '';
+  searchQuery = signal('');
   activeFilter = signal<'all' | 'ongoing' | 'completed'>('all');
 
   createForm = new FormGroup({
@@ -200,18 +201,18 @@ export class KhatmaListComponent {
     description: new FormControl('', [Validators.required])
   });
 
-  get filters(): { id: 'all' | 'ongoing' | 'completed', label: string, count: number }[] {
+  filters = computed(() => {
     const all = this.khatmaService.khatmas();
     return [
-      { id: 'all', label: 'الكل', count: all.length },
-      { id: 'ongoing', label: 'جارية', count: all.filter(k => k.progress < 100).length },
-      { id: 'completed', label: 'مكتملة', count: all.filter(k => k.progress === 100).length }
+      { id: 'all' as const, label: 'الكل', count: all.length },
+      { id: 'ongoing' as const, label: 'جارية', count: all.filter(k => k.progress < 100).length },
+      { id: 'completed' as const, label: 'مكتملة', count: all.filter(k => k.progress === 100).length }
     ];
-  }
+  });
 
   filteredKhatmas = computed(() => {
     let list = this.khatmaService.khatmas();
-    const q = this.searchQuery.toLowerCase().trim();
+    const q = this.searchQuery().toLowerCase().trim();
     const filter = this.activeFilter();
 
     if (filter === 'ongoing') list = list.filter(k => k.progress < 100);
