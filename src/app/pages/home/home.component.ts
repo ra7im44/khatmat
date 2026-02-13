@@ -163,9 +163,18 @@ import { KhatmaService } from '../../services/khatma.service';
             <p class="text-txt-muted text-sm">شارك في ختمة أو أنشئ واحدة جديدة</p>
           </div>
           <div class="flex items-center gap-3 w-full sm:w-auto">
+            <div class="hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-brd bg-surface-el text-[11px] font-bold text-txt-secondary">
+              <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+              {{visibleKhatmasCount}} نتيجة
+            </div>
             <div class="relative flex-1 sm:flex-initial">
               <svg class="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-txt-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-              <input [(ngModel)]="searchQuery" type="text" placeholder="ابحث باسم الختمة..." class="w-full sm:w-56 pr-11 pl-4 py-3 rounded-xl border border-input-brd bg-input-bg text-txt text-xs outline-none transition-all focus:border-focus focus:shadow-[0_0_0_3px_rgba(var(--focus-rgb),0.08)]"/>
+              <input [(ngModel)]="searchQuery" type="text" placeholder="ابحث باسم الختمة..." class="w-full sm:w-56 pr-11 pl-10 py-3 rounded-xl border border-input-brd bg-input-bg text-txt text-xs outline-none transition-all focus:border-focus focus:shadow-[0_0_0_3px_rgba(var(--focus-rgb),0.08)]"/>
+              @if (hasActiveSearch) {
+                <button (click)="clearSearch()" class="absolute left-2.5 top-1/2 -translate-y-1/2 w-6 h-6 rounded-md text-txt-muted hover:text-primary hover:bg-surface-el transition-colors" aria-label="مسح البحث">
+                  <svg class="w-3.5 h-3.5 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.4"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+              }
             </div>
             <a routerLink="/khatmat" class="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-link hover:text-accent transition-colors whitespace-nowrap">عرض الكل <svg class="w-3.5 h-3.5 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></a>
           </div>
@@ -206,7 +215,10 @@ import { KhatmaService } from '../../services/khatma.service';
 
                     </div>
 
-                    <div class="flex items-center gap-1.5 text-[10px] text-txt-muted mb-5"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg> {{getCompletedParts(k)}} / 30 جزء مكتمل</div>
+                    <div class="flex items-center justify-between mb-5">
+                      <div class="flex items-center gap-1.5 text-[10px] text-txt-muted"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg> {{getCompletedParts(k)}} / 30 جزء مكتمل</div>
+                      <span class="px-2.5 py-1 rounded-lg bg-primary/[0.08] text-primary text-[10px] font-bold">{{k.progress}}%</span>
+                    </div>
 
                     <div class="flex items-center gap-2.5">
                       <a [routerLink]="['/khatmat', k.id]" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-primary to-secondary text-white font-bold rounded-xl text-[11px] transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 hover:scale-[1.02]">
@@ -228,11 +240,19 @@ import { KhatmaService } from '../../services/khatma.service';
             <button (click)="openCreateModal()" class="px-7 py-3 bg-gradient-to-r from-primary to-secondary text-white font-bold rounded-xl text-sm hover:shadow-lg hover:shadow-primary/20 transition-all">إنشاء أول ختمة</button>
           </div>
         } @else {
-          <div class="text-center py-14"><p class="text-txt-muted text-sm">لا توجد نتائج لـ "{{searchQuery}}"</p></div>
+          <div class="text-center py-14">
+            <p class="text-txt-muted text-sm mb-4">لا توجد نتائج لـ "{{searchQuery}}"</p>
+            <button (click)="clearSearch()" class="px-5 py-2.5 rounded-xl border border-brd bg-surface-el text-xs font-bold text-txt-secondary hover:text-primary hover:border-primary/20 transition-colors">مسح البحث</button>
+          </div>
         }
         <a routerLink="/khatmat" class="sm:hidden mt-6 block text-center text-xs font-bold text-link">عرض كل الختمات</a>
       </div>
     </section>
+
+    <button (click)="openCreateModal()" class="fixed sm:hidden bottom-6 left-1/2 -translate-x-1/2 z-40 inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-primary to-secondary text-white font-bold text-xs shadow-xl shadow-primary/25">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+      إنشاء ختمة الآن
+    </button>
 
     <!-- ═══ TOOLS ═══ -->
     <section class="py-24">
@@ -367,8 +387,14 @@ export class HomeComponent {
     const q = this.searchQuery.trim().toLowerCase();
     return all.filter(k => k.title.toLowerCase().includes(q) || (k.deceasedName && k.deceasedName.toLowerCase().includes(q)) || k.createdBy.toLowerCase().includes(q));
   }
+  get hasActiveSearch() { return this.searchQuery.trim().length > 0; }
+  get visibleKhatmasCount() { return this.filteredKhatmas.length; }
   get canCreate() { return this.newKhatma.title.trim() && this.newKhatma.createdBy.trim() && this.newKhatma.description.trim(); }
   getCompletedParts(k: any) { return k.parts.filter((p: any) => p.status === 'completed').length; }
+
+  clearSearch() {
+    this.searchQuery = '';
+  }
 
   openCreateModal() {
     this.newKhatma = { title: '', createdBy: '', deceasedName: '', description: '' };
@@ -415,4 +441,3 @@ export class HomeComponent {
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   }
 }
-
