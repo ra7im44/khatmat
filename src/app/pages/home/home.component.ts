@@ -11,7 +11,7 @@ import { KhatmaCardComponent } from '../../components/khatma-card/khatma-card.co
   standalone: true,
   imports: [CommonModule, RouterLink, FormsModule, CreateKhatmaModalComponent, KhatmaCardComponent],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
   private khatmaService = inject(KhatmaService);
@@ -19,11 +19,12 @@ export class HomeComponent {
 
   searchQuery = signal('');
   showCreateModal = signal(false);
+  currentYear = new Date().getFullYear();
 
   steps = [
-    { num: '١', title: 'أنشئ الختمة', desc: 'اكتب اسمك واسم المتوفى وأنشئ ختمة من 30 جزء بنقرة واحدة' },
-    { num: '٢', title: 'شارك الرابط', desc: 'ادعُ العائلة والأصدقاء عبر واتساب أو أي منصة تواصل' },
-    { num: '٣', title: 'يصل الأجر', desc: 'كل جزء يُقرأ يصل ثوابه للمتوفى بإذن الله تعالى' },
+    { num: '١', title: 'أنشئ الختمة', desc: 'أدخل اسم المتوفى وأنشئ ختمة مقسمة إلى 30 جزءاً بثوانٍ معدودة وبخطوة واحدة.' },
+    { num: '٢', title: 'شارك الرابط', desc: 'انسخ رابط الختمة وأرسله لعائلتك وأصدقائك عبر الواتساب للمشاركة في التلاوة.' },
+    { num: '٣', title: 'يصل الأجر', desc: 'يتشارك الجميع قراءة الأجزاء ليتموا الختمة ويهدوا ثوابها، ويبقى لك أجر الدلالة.' },
   ];
 
   statsData = computed(() => {
@@ -35,12 +36,13 @@ export class HomeComponent {
         if (p.completedBy) participants.add(p.completedBy);
         if (p.reservedBy) participants.add(p.reservedBy);
     }));
+
     const totalParticipants = participants.size;
 
     return [
       { value: totalKhatmas, label: 'ختمة جارية', color: 'text-primary', delay: '0ms' },
-      { value: totalCompleted, label: 'جزء مكتمل', color: 'text-txt', delay: '100ms' },
-      { value: totalParticipants, label: 'مشارك', color: 'text-accent', delay: '200ms' },
+      { value: totalCompleted, label: 'جزء مقروء', color: 'text-txt', delay: '100ms' },
+      { value: totalParticipants, label: 'مشارك بالأجر', color: 'text-accent', delay: '200ms' },
     ];
   });
 
@@ -50,9 +52,9 @@ export class HomeComponent {
     const all = this.khatmaService.khatmas();
     const query = this.searchQuery().trim().toLowerCase();
     if (!query) return all;
-    return all.filter(k =>
-      k.title.toLowerCase().includes(query) ||
-      (k.deceasedName && k.deceasedName.toLowerCase().includes(query)) ||
+    return all.filter(k => 
+      k.title.toLowerCase().includes(query) || 
+      (k.deceasedName && k.deceasedName.toLowerCase().includes(query)) || 
       k.createdBy.toLowerCase().includes(query)
     );
   });
