@@ -26,7 +26,7 @@ import { provideHttpClient } from '@angular/common/http';
 
       <!-- ═══ HEADER ═══ -->
       <header class="fixed top-0 left-0 right-0 z-50">
-        <div class="absolute inset-0 bg-surface/60 backdrop-blur-2xl border-b border-brd/40 shadow-[0_1px_20px_rgba(0,0,0,0.04)]"></div>
+        <div class="absolute inset-0 bg-surface/90 backdrop-blur-md border-b border-brd/60 shadow-[0_1px_10px_rgba(0,0,0,0.04)]"></div>
 
         <div class="relative max-w-7xl mx-auto px-4 md:px-8 h-16 md:h-[72px] flex items-center justify-between">
 
@@ -47,16 +47,16 @@ import { provideHttpClient } from '@angular/common/http';
           </a>
 
           <!-- Desktop Nav -->
-          <nav class="hidden md:flex items-center gap-1 p-1.5 rounded-2xl border border-brd/60 bg-surface-el/50 backdrop-blur-sm">
-            <a routerLink="/" routerLinkActive="!bg-gradient-to-r !from-primary !to-secondary !text-white !shadow-md !shadow-primary/20" [routerLinkActiveOptions]="{exact:true}" class="px-5 py-2 rounded-xl text-[13px] font-bold text-txt-muted hover:text-txt transition-all duration-300">الرئيسية</a>
-            <a routerLink="/khatmat" routerLinkActive="!bg-gradient-to-r !from-primary !to-secondary !text-white !shadow-md !shadow-primary/20" class="px-5 py-2 rounded-xl text-[13px] font-bold text-txt-muted hover:text-txt transition-all duration-300">الختمات</a>
-            <a routerLink="/coach" routerLinkActive="!bg-gradient-to-r !from-primary !to-secondary !text-white !shadow-md !shadow-primary/20" class="px-5 py-2 rounded-xl text-[13px] font-bold text-txt-muted hover:text-txt transition-all duration-300">المصحّح</a>
-            <a routerLink="/duas" routerLinkActive="!bg-gradient-to-r !from-primary !to-secondary !text-white !shadow-md !shadow-primary/20" class="px-5 py-2 rounded-xl text-[13px] font-bold text-txt-muted hover:text-txt transition-all duration-300">الأدعية</a>
+          <nav class="hidden md:flex items-center gap-1 p-1.5 rounded-2xl border border-brd/60 bg-surface-el/75">
+            <a routerLink="/" routerLinkActive="!bg-gradient-to-r !from-primary !to-secondary !text-white !shadow-md !shadow-primary/20" [routerLinkActiveOptions]="{exact:true}" class="px-5 py-2 rounded-xl text-[13px] font-bold text-txt-muted hover:text-txt transition-colors duration-200">الرئيسية</a>
+            <a routerLink="/khatmat" routerLinkActive="!bg-gradient-to-r !from-primary !to-secondary !text-white !shadow-md !shadow-primary/20" class="px-5 py-2 rounded-xl text-[13px] font-bold text-txt-muted hover:text-txt transition-colors duration-200">الختمات</a>
+            <a routerLink="/coach" routerLinkActive="!bg-gradient-to-r !from-primary !to-secondary !text-white !shadow-md !shadow-primary/20" class="px-5 py-2 rounded-xl text-[13px] font-bold text-txt-muted hover:text-txt transition-colors duration-200">المصحّح</a>
+            <a routerLink="/duas" routerLinkActive="!bg-gradient-to-r !from-primary !to-secondary !text-white !shadow-md !shadow-primary/20" class="px-5 py-2 rounded-xl text-[13px] font-bold text-txt-muted hover:text-txt transition-colors duration-200">الأدعية</a>
           </nav>
 
           <!-- Actions -->
           <div class="flex items-center gap-2">
-            <button (click)="themeService.toggleTheme()" class="w-10 h-10 rounded-xl border border-brd/60 bg-surface/80 backdrop-blur-sm text-txt-muted hover:text-accent hover:border-accent/30 hover:bg-accent/[0.04] transition-all duration-300" aria-label="تبديل المظهر">
+            <button (click)="themeService.toggleTheme()" class="w-10 h-10 rounded-xl border border-brd/60 bg-surface text-txt-muted hover:text-accent hover:border-accent/30 hover:bg-accent/[0.04] transition-colors duration-200" aria-label="تبديل المظهر">
               @if (themeService.isDarkMode()) {
                 <svg class="h-[18px] w-[18px] mx-auto text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
               } @else {
@@ -74,7 +74,7 @@ import { provideHttpClient } from '@angular/common/http';
 
       <!-- ═══ MOBILE BOTTOM NAV ═══ -->
       <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 px-4 pb-4 pt-2">
-        <div class="bg-surface/80 backdrop-blur-2xl border border-brd/50 rounded-2xl shadow-xl shadow-black/10 px-2 py-2 flex items-center justify-around">
+        <div class="bg-surface/95 border border-brd/60 rounded-2xl shadow-lg shadow-black/5 px-2 py-2 flex items-center justify-around">
           <a routerLink="/" routerLinkActive="text-primary" [routerLinkActiveOptions]="{exact:true}" class="flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl text-txt-muted hover:text-primary transition-colors">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
             <span class="text-[9px] font-bold">الرئيسية</span>
@@ -95,9 +95,9 @@ import { provideHttpClient } from '@angular/common/http';
       </nav>
 
       <!-- ═══ FOOTER ═══ -->
-      <footer class="hidden md:block relative mt-12 border-t border-brd/50 bg-surface/60 backdrop-blur-xl" dir="rtl">
-        <div class="absolute inset-0 islamic-pattern-dense opacity-20 dark:opacity-[0.03] pointer-events-none"></div>
-        <div class="relative max-w-7xl mx-auto px-8 py-10">
+      <footer class="relative mt-12 border-t border-brd/60 bg-surface/85" dir="rtl">
+        <div class="absolute inset-0 islamic-pattern-dense opacity-20 dark:opacity-[0.04] pointer-events-none"></div>
+        <div class="relative max-w-7xl mx-auto px-6 md:px-8 py-8 md:py-10">
           <div class="flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="flex items-center gap-4">
               <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white shadow-md shadow-primary/15">
@@ -108,7 +108,7 @@ import { provideHttpClient } from '@angular/common/http';
                 <p class="text-[11px] text-txt-muted">مشروع صدقة جارية — خاتم بالخيرات</p>
               </div>
             </div>
-            <div class="flex items-center gap-6">
+            <div class="flex flex-wrap items-center justify-center gap-3 md:gap-6">
               <span class="text-[11px] text-txt-muted font-medium">صنع بحب ❤️ لوجه الله</span>
               <span class="w-1 h-1 rounded-full bg-brd"></span>
               <p class="text-[11px] text-txt-muted font-medium">© {{currentYear}} جميع الحقوق محفوظة</p>

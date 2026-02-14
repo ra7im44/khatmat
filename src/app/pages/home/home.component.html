@@ -4,10 +4,10 @@
 >
   <!-- Ambient Blobs (Optimized) -->
   <div
-    class="absolute top-[-15%] right-[-8%] w-[500px] h-[500px] rounded-full blur-[100px] opacity-[0.06] bg-primary animate-drift pointer-events-none"
+    class="absolute top-[-15%] right-[-8%] w-[500px] h-[500px] rounded-full blur-[72px] opacity-[0.05] bg-primary/80 pointer-events-none"
   ></div>
   <div
-    class="absolute bottom-[-15%] left-[-10%] w-[400px] h-[400px] rounded-full blur-[80px] opacity-[0.04] bg-accent animate-drift pointer-events-none"
+    class="absolute bottom-[-15%] left-[-10%] w-[400px] h-[400px] rounded-full blur-[56px] opacity-[0.04] bg-accent/80 pointer-events-none"
     style="animation-delay: -7s"
   ></div>
   <div
@@ -37,7 +37,7 @@
 
         <!-- Heading -->
         <h1
-          class="animate-hero text-[2.8rem] md:text-[3.6rem] lg:text-[4rem] font-black leading-[1.12] text-txt mb-7"
+          class="text-[2.8rem] md:text-[3.6rem] lg:text-[4rem] font-black leading-[1.12] text-txt mb-7"
         >
           اختم القرآن
           <br />
@@ -46,7 +46,7 @@
 
         <!-- Description -->
         <p
-          class="animate-fade-up delay-200 text-txt-secondary text-[15px] md:text-base leading-[2] max-w-xl mx-auto lg:mx-0 lg:mr-0 mb-10"
+          class="text-txt-secondary text-[15px] md:text-base leading-[2] max-w-xl mx-auto lg:mx-0 lg:mr-0 mb-10"
         >
           أنشئ ختمة قرآنية جماعية وأهدِ ثوابها لروح من فقدت.
           <br class="hidden md:block" />
@@ -55,7 +55,7 @@
 
         <!-- CTAs -->
         <div
-          class="animate-fade-up delay-300 flex flex-col sm:flex-row gap-3.5 justify-center lg:justify-start"
+          class="flex flex-col sm:flex-row gap-3.5 justify-center lg:justify-start"
         >
           <button
             (click)="showCreateModal.set(true)"
@@ -103,7 +103,7 @@
 
       <!-- Visual Orb -->
       <div
-        class="order-1 lg:order-2 flex justify-center animate-scale-in delay-200"
+        class="order-1 lg:order-2 flex justify-center"
       >
         <div class="relative w-72 h-72 md:w-80 md:h-80">
           <!-- Outer decorative rings -->
@@ -116,13 +116,13 @@
 
           <!-- Center Card -->
           <div
-            class="absolute inset-10 rounded-[2rem] glass shadow-2xl flex flex-col items-center justify-center text-center p-5 animate-pulse-glow"
+            class="absolute inset-10 rounded-[2rem] glass shadow-2xl flex flex-col items-center justify-center text-center p-5"
           >
             <div
               class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center mb-3"
             >
               <svg
-                class="w-7 h-7 text-primary animate-float-slow"
+                class="w-7 h-7 text-primary"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -142,7 +142,7 @@
           </div>
 
           <!-- Floating Icons -->
-          <div class="absolute top-2 right-6 animate-pop-in delay-500">
+          <div class="absolute top-2 right-6 animate-pop-in">
             <div
               class="w-12 h-12 rounded-2xl glass shadow-lg flex items-center justify-center animate-float"
               style="animation-delay: -2s"
@@ -162,7 +162,7 @@
               </svg>
             </div>
           </div>
-          <div class="absolute bottom-3 left-1 animate-pop-in delay-600">
+          <div class="absolute bottom-3 left-1 animate-pop-in">
             <div
               class="w-11 h-11 rounded-xl glass shadow-lg flex items-center justify-center animate-float"
               style="animation-delay: -4s"
@@ -182,7 +182,7 @@
               </svg>
             </div>
           </div>
-          <div class="absolute top-1/2 left-[-10px] animate-pop-in delay-700">
+          <div class="absolute top-1/2 left-[-10px] animate-pop-in">
             <div
               class="w-10 h-10 rounded-xl glass shadow-lg flex items-center justify-center animate-float"
               style="animation-delay: -1s"
@@ -208,10 +208,10 @@
 
     <!-- Stats Row -->
     <div
-      class="animate-fade-up delay-500 mt-16 pt-10 border-t border-brd/40 grid grid-cols-3 gap-8 max-w-md mx-auto lg:mx-0 text-center lg:text-right"
+      class="mt-16 pt-10 border-t border-brd/40 grid grid-cols-3 gap-8 max-w-md mx-auto lg:mx-0 text-center lg:text-right"
     >
       @for (stat of statsData(); track stat.label) {
-      <div class="animate-count" [style.animation-delay]="stat.delay">
+      <div [style.animation-delay]="stat.delay">
         <div class="text-2xl md:text-3xl font-black" [class]="stat.color">
           {{ stat.value || '—' }}
         </div>
@@ -227,7 +227,7 @@
 </section>
 
 <!-- ═══ HADITH ═══ -->
-<section class="animate-fade-up py-24 relative overflow-hidden">
+<section class="py-20 relative overflow-hidden">
   <div
     class="absolute inset-0 bg-gradient-to-b from-surface/50 via-surface to-surface/50"
   ></div>
@@ -548,21 +548,21 @@
       class="relative rounded-[2rem] overflow-hidden shadow-2xl shadow-primary/10"
     >
       <div
-        class="absolute inset-0 bg-gradient-to-br from-primary via-secondary to-accent animate-gradient"
+        class="absolute inset-0 bg-gradient-to-br from-primary via-secondary to-accent "
       ></div>
       <div
         class="absolute inset-0 islamic-pattern-dense opacity-[0.06] pointer-events-none"
       ></div>
       <div
-        class="absolute top-[-40%] right-[-15%] w-72 h-72 rounded-full bg-white/[0.04] blur-3xl"
+        class="absolute top-[-40%] right-[-15%] w-72 h-72 rounded-full bg-white/[0.04] blur-2xl"
       ></div>
       <div
-        class="absolute bottom-[-30%] left-[-10%] w-60 h-60 rounded-full bg-black/[0.06] blur-3xl"
+        class="absolute bottom-[-30%] left-[-10%] w-60 h-60 rounded-full bg-black/[0.06] blur-2xl"
       ></div>
 
       <div class="relative z-10 p-10 md:p-16 text-center">
         <div
-          class="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-6 animate-float-slow backdrop-blur-sm border border-white/10"
+          class="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-6 backdrop-blur-sm border border-white/10"
         >
           <svg
             class="w-8 h-8 text-white"
@@ -586,7 +586,7 @@
         </p>
         <button
           (click)="showCreateModal.set(true)"
-          class="group inline-flex items-center gap-3 px-10 py-4 bg-white text-primary font-bold rounded-2xl hover:shadow-2xl transition-all duration-300 hover:scale-105 text-[15px] shadow-xl"
+          class="group inline-flex items-center gap-3 px-10 py-4 bg-white text-primary font-bold rounded-2xl hover:shadow-xl transition-all duration-200 hover:scale-[1.02] text-[15px] shadow-xl"
         >
           ابدأ الآن
           <svg
@@ -607,11 +607,6 @@
     </div>
   </div>
 </section>
-
-<!-- Footer -->
-<footer class="border-t border-brd/50 bg-surface/50 backdrop-blur-sm py-8 text-center">
-  <p class="text-[10px] font-bold text-txt-muted">جميع الحقوق محفوظة © 2024</p>
-</footer>
 
 <!-- ═══ CREATE MODAL ═══ -->
 @if (showCreateModal()) {
