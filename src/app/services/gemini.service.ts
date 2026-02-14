@@ -21,7 +21,19 @@ export interface RecitationAnalysis {
   providedIn: 'root'
 })
 export class GeminiService {
-  private ai = new GoogleGenAI({ apiKey: environment.geminiApiKey });
+  private ai: GoogleGenAI | null = null;
+
+  private getAiClient(): GoogleGenAI | null {
+    if (!environment.geminiApiKey) {
+      return null;
+    }
+
+    if (!this.ai) {
+      this.ai = new GoogleGenAI({ apiKey: environment.geminiApiKey });
+    }
+
+    return this.ai;
+  }
 
   async analyzeRecitation(audioBlob: Blob): Promise<RecitationAnalysis> {
     try {
@@ -48,7 +60,13 @@ export class GeminiService {
   "feedback": "نصيحة واحدة مختصرة"
 }`;
 
-      const response = await this.ai.models.generateContent({
+      const aiClient = this.getAiClient();
+
+      if (!aiClient) {
+        return this.simulateResponse();
+      }
+
+      const response = await aiClient.models.generateContent({
         model: 'gemini-1.5-flash',
         contents: [{
           role: 'user',

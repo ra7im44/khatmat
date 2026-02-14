@@ -8,12 +8,6 @@ import { KhatmaService } from './app/services/khatma.service';
 import { GeminiService } from './app/services/gemini.service';
 import { ThemeService } from './app/services/theme.service';
 
-import { HomeComponent } from './app/pages/home/home.component';
-import { KhatmaListComponent } from './app/pages/khatma/list/khatma-list.component';
-import { KhatmaDetailComponent } from './app/pages/khatma/detail/khatma-detail.component';
-import { CoachComponent } from './app/pages/coach/coach.component';
-import { DuasComponent } from './app/pages/duas/duas.component';
-import { JuzReaderComponent } from './app/pages/quran/juz-reader/juz-reader.component';
 import { provideZoneChangeDetection } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
 
@@ -125,13 +119,43 @@ export class App {
 }
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'khatmat', component: KhatmaListComponent },
-  { path: 'khatmat/:id', component: KhatmaDetailComponent },
-  { path: 'coach', component: CoachComponent },
-  { path: 'duas', component: DuasComponent },
-  { path: 'quran/juz/:juz', component: JuzReaderComponent },
-  { path: '**', redirectTo: '' }
+  {
+    path: '',
+    loadComponent: () =>
+      import('./app/pages/home/home.component').then((m) => m.HomeComponent),
+  },
+  {
+    path: 'khatmat',
+    loadComponent: () =>
+      import('./app/pages/khatma/list/khatma-list.component').then(
+        (m) => m.KhatmaListComponent,
+      ),
+  },
+  {
+    path: 'khatmat/:id',
+    loadComponent: () =>
+      import('./app/pages/khatma/detail/khatma-detail.component').then(
+        (m) => m.KhatmaDetailComponent,
+      ),
+  },
+  {
+    path: 'coach',
+    loadComponent: () =>
+      import('./app/pages/coach/coach.component').then((m) => m.CoachComponent),
+  },
+  {
+    path: 'duas',
+    loadComponent: () =>
+      import('./app/pages/duas/duas.component').then((m) => m.DuasComponent),
+  },
+  {
+    path: 'quran/juz/:juz',
+    loadComponent: () =>
+      import('./app/pages/quran/juz-reader/juz-reader.component').then(
+        (m) => m.JuzReaderComponent,
+      ),
+  },
+  { path: '**', redirectTo: '' },
 ];
 
 bootstrapApplication(App, {
