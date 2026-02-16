@@ -118,7 +118,7 @@ import { provideHttpClient } from '@angular/common/http';
               </div>
               <div>
                 <p class="text-sm font-black">أثر هدى</p>
-                <p class="text-[11px] text-txt-muted uppercase tracking-wider">athr huda</p>
+                <p class="text-[11px] text-txt-muted uppercase tracking-wider">athar huda</p>
               </div>
             </div>
             <div class="flex flex-wrap items-center justify-center gap-3 md:gap-6">
