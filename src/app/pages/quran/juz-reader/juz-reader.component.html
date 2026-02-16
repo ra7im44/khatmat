@@ -83,14 +83,7 @@
             </svg>
           </button>
 
-          <!-- Go To -->
-          <button (click)="toggleGoTo()" class="quran-control" [class.active]="showGoTo()" title="اذهب إلى">
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-            </svg>
-          </button>
+
 
           <!-- Bookmarks -->
           <button (click)="showBookmarksPanel.set(!showBookmarksPanel())" class="quran-control"
@@ -110,14 +103,7 @@
             </svg>
           </button>
 
-          <!-- Memorization (Phase 2) -->
-          <button (click)="showMemorizationPanel.set(!showMemorizationPanel())" class="quran-control"
-            [class.active]="showMemorizationPanel() || memorizationMode()" title="أدوات الحفظ">
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.906 59.906 0 0112 3.493a59.903 59.903 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
-            </svg>
-          </button>
+
 
           <!-- Translation Toggle -->
           <button (click)="toggleTranslation()" class="quran-control" [class.active]="showTranslation()"
@@ -163,33 +149,7 @@
     </div>
   </div>
 
-  <!-- ═══ GO TO PANEL ═══ -->
-  <div class="goto-panel" *ngIf="showGoTo()">
-    <div class="max-w-5xl mx-auto px-4">
-      <div class="goto-inner">
-        <h3>اذهب إلى</h3>
-        <div class="goto-type-btns">
-          <button [class.active]="goToType() === 'surah'" (click)="goToType.set('surah')">سورة</button>
-          <button [class.active]="goToType() === 'juz'" (click)="goToType.set('juz')">جزء</button>
-          <button [class.active]="goToType() === 'ayah'" (click)="goToType.set('ayah')">آية (رقم عام)</button>
-        </div>
-        <div class="goto-input-row">
-          <input type="number" [ngModel]="goToValue()" (ngModelChange)="goToValue.set($event)"
-            [placeholder]="goToType() === 'surah' ? 'رقم السورة' : goToType() === 'juz' ? 'رقم الجزء (1-30)' : 'رقم الآية'"
-            class="goto-input" (keydown.enter)="executeGoTo()" />
-          <button (click)="executeGoTo()" class="goto-go-btn">اذهب</button>
-        </div>
-        <!-- Surahs in this Juz -->
-        <div class="goto-surahs" *ngIf="goToType() === 'surah' && surahsInJuz().length">
-          <p class="goto-hint">السور في هذا الجزء:</p>
-          <button *ngFor="let s of surahsInJuz()" class="goto-surah-chip"
-            (click)="navigateToVerseIndex(s.startIndex); showGoTo.set(false)">
-            {{ s.name }} ({{ s.versesCount }} آية)
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+
 
   <!-- ═══ BOOKMARKS PANEL ═══ -->
   <div class="bookmarks-panel" *ngIf="showBookmarksPanel()">
@@ -199,20 +159,15 @@
           <h3>العلامات المرجعية</h3>
           <button (click)="showBookmarksPanel.set(false)" class="bm-close">✕</button>
         </div>
-        <div class="bm-filter">
-          <button [class.active]="bookmarkTypeFilter() === 'all'" (click)="bookmarkTypeFilter.set('all')">الكل</button>
-          <button [class.active]="bookmarkTypeFilter() === 'khatma'"
-            (click)="bookmarkTypeFilter.set('khatma')">ختمة</button>
-          <button [class.active]="bookmarkTypeFilter() === 'hifz'" (click)="bookmarkTypeFilter.set('hifz')">حفظ</button>
-          <button [class.active]="bookmarkTypeFilter() === 'tadabbur'"
-            (click)="bookmarkTypeFilter.set('tadabbur')">تدبر</button>
-        </div>
+
         <div class="bm-list" *ngIf="filteredBookmarks().length; else noBm">
           <div *ngFor="let b of filteredBookmarks()" class="bm-item">
-            <div class="bm-item-info">
-              <span class="bm-type-badge" [attr.data-type]="b.type">{{ b.type === 'khatma' ? 'ختمة' : b.type === 'hifz'
-                ? 'حفظ' : 'تدبر' }}</span>
-              <span>{{ b.surahName || 'آية' }} : {{ b.ayahInSurah }}</span>
+            <div class="bm-item-info cursor-pointer hover:bg-surface-el/10 transition-colors flex-1"
+              (click)="jumpToBookmark(b)">
+              <div class="flex flex-col ms-2">
+                <span class="text-sm font-bold text-primary">{{ b.surahName || 'سورة غير معروفة' }}</span>
+                <span class="text-[11px] text-txt-muted font-medium">الآية رقم {{ b.ayahInSurah }}</span>
+              </div>
             </div>
             <button (click)="removeBookmark(b.verseNumber, b.type)" class="bm-remove">حذف</button>
           </div>
@@ -387,16 +342,24 @@
   }
 
   <!-- ═══ WHERE AM I BAR ═══ -->
-  <div class="where-bar chrome-el" *ngIf="verses().length && !loading() && !focusMode()">
-    <div class="max-w-5xl mx-auto px-4 flex items-center justify-between gap-2 text-[11px] font-bold text-txt-muted">
+  @if (verses().length && !loading() && !focusMode()) {
+  <div class="where-bar chrome-el">
+    <div
+      class="max-w-5xl mx-auto px-4 flex items-center justify-between gap-2 text-[11px] font-bold text-txt-muted w-full">
       <span>الجزء {{ juzNumber() }}</span>
-      <span *ngIf="surahsInJuz().length">{{ surahsInJuz().length > 1 ? surahsInJuz().length + ' سور' :
-        surahsInJuz()[0]?.name }}</span>
+      @if (surahsInJuz(); as surahs) {
+      @if (surahs.length) {
+      <span>{{ surahs.length > 1 ? surahs.length + ' سور' : surahs[0].name }}</span>
+      }
+      }
       <span>{{ verses().length }} آية</span>
-      <span *ngIf="mushafPages().length">صفحات {{ mushafPages()[0] }} - {{ mushafPages()[mushafPages().length - 1]
-        }}</span>
+      @if (mushafPages().length) {
+      <span>{{ mushafPages().length > 1 ? 'صفحات ' + mushafPages()[0] + ' - ' + mushafPages()[mushafPages().length - 1]
+        : 'صفحة ' + mushafPages()[0] }}</span>
+      }
     </div>
   </div>
+  }
 
   <main class="max-w-5xl mx-auto px-4 md:px-6 py-6 md:py-8">
     @if (loading()) {
@@ -433,22 +396,7 @@
     } @else {
 
     <!-- HERO (hideable in focus) -->
-    <section class="quran-hero rounded-[2rem] border border-brd/60 p-6 md:p-8 mb-8 chrome-el">
-      <div class="quran-hero-top">
-        <div class="quran-hero-title">
-          <p class="quran-hero-kicker">نبذة الجزء</p>
-          <h2>الجزء {{juzNumber()}} - {{getJuzName(juzNumber())}}</h2>
-          <p>اضغط على أي كلمة لسماع نطقها. اضغط F لوضع التركيز.</p>
-        </div>
-      </div>
-      <div class="quran-meta mt-5">
-        <span class="quran-meta-chip">عدد الآيات: {{verses().length}}</span>
-        <span class="quran-meta-chip">السور: {{getJuzSurahs(juzNumber())}}</span>
-        @if (readerName()) {
-        <span class="quran-meta-chip">القارئ: {{readerName()}}</span>
-        }
-      </div>
-    </section>
+
 
     <!-- ═══ MODE: CONTINUOUS ═══ -->
     @if (readingMode() === 'continuous') {
@@ -472,14 +420,27 @@
 
         <!-- Verse actions (bookmark) -->
         <span class="verse-actions-inline">
-          <button class="va-btn" (click)="playAudio(verse)" title="تشغيل">🔊</button>
-          <button class="va-btn" (click)="copyVerse(verse)" title="نسخ">📋</button>
+          <button class="va-btn" (click)="playAudio(verse)" title="تشغيل">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+          </button>
+          <button class="va-btn" (click)="copyVerse(verse)" title="نسخ">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          </button>
           <button class="va-btn" [class.bookmarked]="isBookmarked(verse.number)" (click)="addBookmark(verse, 'khatma')"
-            title="إضافة علامة">🔖</button>
-          <button class="va-btn" [class.bookmarked]="hasNote(verse.number)" (click)="openNoteEditor(verse.number)"
-            title="ملاحظة">📝</button>
-          <button class="va-btn" [class.bookmarked]="isInPlaylist(verse.number)" (click)="addToPlaylist(verse)"
-            title="إضافة لقائمة الحفظ">📚</button>
+            title="إضافة علامة">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </button>
+
         </span>
 
         @if (memorizationMode()) {
@@ -505,7 +466,14 @@
         <!-- Surah info -->
         <div class="verse-surah-label">{{ v.surahName }} — آية {{ v.numberInSurah }}</div>
 
-        <p class="verse-mode-text font-quran" [style.fontSize.px]="fontSize()">{{ v.text }}</p>
+        <div class="verse-mode-text font-quran" [style.fontSize.px]="fontSize()">
+          @for (word of getVerseWords(v); track $index) {
+          <button type="button" class="quran-word"
+            [class.quran-word-playing]="currentPlayingVerse() === v.number && currentPlayingWordIndex() === $index"
+            [class.quran-word-active-verse]="currentPlayingVerse() === v.number && currentPlayingWordIndex() !== $index"
+            (click)="pronounceWord(word, v, $index)" [style.fontSize.px]="fontSize()">{{word}}</button>
+          }
+        </div>
 
         @if (showTranslation() && v.translationEn) {
         <p class="verse-mode-translation">{{ v.translationEn }}</p>
@@ -515,10 +483,7 @@
         <div class="verse-mode-actions">
           <button (click)="playAudio(v)" class="vma-btn">🔊 تشغيل</button>
           <button (click)="copyVerse(v)" class="vma-btn">📋 نسخ</button>
-          <button (click)="addBookmark(v, 'hifz')" class="vma-btn">📝 حفظ</button>
-          <button (click)="addBookmark(v, 'tadabbur')" class="vma-btn">💭 تدبر</button>
-          <button (click)="openNoteEditor(v.number)" class="vma-btn">✏️ ملاحظة</button>
-          <button (click)="addToPlaylist(v)" class="vma-btn">📚 قائمة الحفظ</button>
+          <button (click)="addBookmark(v, 'hifz')" class="vma-btn">� حفظ</button>
           <button (click)="shareVerse(v, 'whatsapp')" class="vma-btn">📤 مشاركة</button>
         </div>
       </div>
@@ -578,8 +543,7 @@
 
       <!-- Mushaf Pagination -->
       <div class="mushaf-nav">
-        <button (click)="nextMushafPage()" [disabled]="mushafCurrentPage() === mushafPages()[mushafPages().length - 1]"
-          class="verse-nav-btn">
+        <button (click)="prevMushafPage()" [disabled]="mushafCurrentPage() === mushafPages()[0]" class="verse-nav-btn">
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
           </svg>
@@ -587,7 +551,8 @@
         </button>
         <span class="verse-nav-counter">{{ mushafPages().indexOf(mushafCurrentPage()) + 1 }} / {{ mushafPages().length
           }}</span>
-        <button (click)="prevMushafPage()" [disabled]="mushafCurrentPage() === mushafPages()[0]" class="verse-nav-btn">
+        <button (click)="nextMushafPage()" [disabled]="mushafCurrentPage() === mushafPages()[mushafPages().length - 1]"
+          class="verse-nav-btn">
           التالية
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />

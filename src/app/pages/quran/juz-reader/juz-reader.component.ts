@@ -62,6 +62,7 @@ interface SearchResult {
   matchStart: number;
   contextBefore?: string;
   contextAfter?: string;
+  score?: number;
 }
 
 // Surah info for display
@@ -388,16 +389,26 @@ export class JuzReaderComponent implements OnInit, OnDestroy {
         englishTranslationAyahs.map((ayah) => [ayah.number, ayah.text])
       );
 
-      const mappedVerses: Verse[] = ayahs.map((ayah) => ({
-        number: ayah.number,
-        surahNumber: ayah.surah?.number ?? 1,
-        numberInSurah: ayah.numberInSurah,
-        text: ayah.text,
-        translationEn: englishTranslationByNumber.get(ayah.number),
-        pageNumber: ayah.page,
-        surahName: ayah.surah?.name,
-        hizbQuarter: ayah.hizbQuarter
-      }));
+      const bismillahPattern = /^[\ufeff]?\u0628\u0650\u0633\u0652\u0645\u0650\s+\u0671\u0644\u0644\u0651\u064e\u0647\u0650\s+\u0671\u0644\u0631\u0651\u064e\u062d\u0652\u0645\u064e\u0670\u0646\u0650\s+\u0671\u0644\u0631\u0651\u064e\u062d\u0650\u064a\u0645\u0650\s*/;
+
+      const mappedVerses: Verse[] = ayahs.map((ayah) => {
+        let text = ayah.text;
+        const surahNum = ayah.surah?.number ?? 1;
+        // Strip Bismillah from first ayah of each Surah (except Al-Fatiha and At-Tawba)
+        if (ayah.numberInSurah === 1 && surahNum !== 1 && surahNum !== 9) {
+          text = text.replace(bismillahPattern, '').trim();
+        }
+        return {
+          number: ayah.number,
+          surahNumber: surahNum,
+          numberInSurah: ayah.numberInSurah,
+          text,
+          translationEn: englishTranslationByNumber.get(ayah.number),
+          pageNumber: ayah.page,
+          surahName: ayah.surah?.name,
+          hizbQuarter: ayah.hizbQuarter
+        };
+      });
 
       this.verses.set(mappedVerses);
 
@@ -512,29 +523,67 @@ export class JuzReaderComponent implements OnInit, OnDestroy {
   }
 
   performSearch() {
-    const q = this.searchQuery().trim();
+    let q = this.searchQuery().trim();
     if (!q || q.length < 2) {
       this.searchResults.set([]);
       return;
     }
 
+    // Check if query is a number (verse number search)
+    const verseNumSearch = parseInt(q, 10);
+    const isNum = !isNaN(verseNumSearch);
+
+    // Normalize query
+    const normalizedQ = this.normalizeForMatch(q);
     const allVerses = this.verses();
     const results: SearchResult[] = [];
 
     allVerses.forEach((verse, index) => {
-      const pos = verse.text.indexOf(q);
-      if (pos >= 0) {
+      let score = 0;
+      let matchStart = -1;
+
+      // 1. Direct Verse Number Match
+      if (isNum && verse.numberInSurah === verseNumSearch) {
+        score += 100;
+        matchStart = 0;
+      }
+
+      // 2. Normalized Text Match
+      const normalizedVerse = this.normalizeForMatch(verse.text);
+
+      if (normalizedVerse.includes(normalizedQ)) {
+        score += 50;
+        matchStart = normalizedVerse.indexOf(normalizedQ);
+        // Bonus for exact word match (surrounded by space or start/end)
+        const outputQ = normalizedQ.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        if (new RegExp(`(^|\\s)${outputQ}($|\\s)`).test(normalizedVerse)) {
+          score += 20;
+        }
+      }
+
+      // 3. Surah Name Match
+      if (verse.surahName && this.normalizeForMatch(verse.surahName).includes(normalizedQ)) {
+        score += 30;
+        matchStart = 0;
+      }
+
+      if (score > 0) {
         const prevVerse = index > 0 ? allVerses[index - 1] : undefined;
         const nextVerse = index < allVerses.length - 1 ? allVerses[index + 1] : undefined;
+
         results.push({
           verse,
           index,
-          matchStart: pos,
-          contextBefore: prevVerse ? prevVerse.text.slice(-40) : undefined,
-          contextAfter: nextVerse ? nextVerse.text.slice(0, 40) : undefined,
+          matchStart,
+          contextBefore: prevVerse ? prevVerse.text.slice(-35) : undefined,
+          contextAfter: nextVerse ? nextVerse.text.slice(0, 35) : undefined,
+          score
         });
       }
     });
+
+    // Sort by score (descending)
+    results.sort((a, b) => (b.score || 0) - (a.score || 0));
 
     this.searchResults.set(results);
   }
@@ -555,44 +604,7 @@ export class JuzReaderComponent implements OnInit, OnDestroy {
     this.showSearch.set(false);
   }
 
-  // ═══════════ GO TO NAVIGATOR ═══════════
-
-  toggleGoTo() {
-    this.showGoTo.update(v => !v);
-    this.goToValue.set('');
-  }
-
-  executeGoTo() {
-    const val = parseInt(this.goToValue(), 10);
-    if (!Number.isFinite(val) || val < 1) return;
-
-    const type = this.goToType();
-
-    if (type === 'juz') {
-      if (val >= 1 && val <= 30) {
-        this.router.navigate(['/quran/juz', val]);
-        this.showGoTo.set(false);
-      }
-    } else if (type === 'surah') {
-      // find first verse of this surah in current juz
-      const idx = this.verses().findIndex(v => v.surahNumber === val);
-      if (idx >= 0) {
-        this.navigateToVerseIndex(idx);
-        this.showGoTo.set(false);
-      } else {
-        this.triggerToast('هذه السورة غير موجودة في هذا الجزء');
-      }
-    } else if (type === 'ayah') {
-      // Go to global ayah number
-      const idx = this.verses().findIndex(v => v.number === val);
-      if (idx >= 0) {
-        this.navigateToVerseIndex(idx);
-        this.showGoTo.set(false);
-      } else {
-        this.triggerToast('هذه الآية غير موجودة في هذا الجزء');
-      }
-    }
-  }
+  // ═══════════ GO TO NAVIGATOR (Removed) ═══════════
 
   navigateToVerseIndex(idx: number) {
     const mode = this.readingMode();
@@ -697,16 +709,154 @@ export class JuzReaderComponent implements OnInit, OnDestroy {
     this.triggerToast('تم نسخ الآية بنجاح');
   }
 
+  // Regex matching standalone Waqf / pause marks (no Arabic letters)
+  private readonly WAQF_MARK_RE = /^[\u06D6-\u06ED\u06DE\u06DF\u0600-\u0605\u0610-\u061A\u0640\u08D4-\u08E1\u08E3-\u08FF\uFDFD]+$/;
+
+  // Check if a token is a standalone Waqf/pause mark (no letters)
+  private isStandaloneWaqfMark(token: string): boolean {
+    return this.WAQF_MARK_RE.test(token) || !this.normalizeForMatch(token);
+  }
+
   getVerseWords(verse: Verse): string[] {
     const cached = this.verseWordsCache.get(verse.number);
     if (cached) return cached;
-    const words = verse.text.split(/\s+/).filter(Boolean);
+    let text = verse.text;
+
+    // Strip Bismillah prefix from the first ayah of each Surah
+    // (except Al-Fatiha #1 where it IS the ayah, and At-Tawba #9 which has no Bismillah)
+    if (verse.numberInSurah === 1 && verse.surahNumber !== 1 && verse.surahNumber !== 9) {
+      const bismillahPattern = /^[\ufeff]?\u0628\u0650\u0633\u0652\u0645\u0650\s+\u0671\u0644\u0644\u0651\u064e\u0647\u0650\s+\u0671\u0644\u0631\u0651\u064e\u062d\u0652\u0645\u064e\u0670\u0646\u0650\s+\u0671\u0644\u0631\u0651\u064e\u062d\u0650\u064a\u0645\u0650\s*/;
+      text = text.replace(bismillahPattern, '').trim();
+    }
+
+    const rawTokens = text.split(/\s+/).filter(Boolean);
+
+    // Merge standalone Waqf marks (e.g. ۚ ۖ ۗ) into the PRECEDING word.
+    // alquran.cloud sometimes splits them as separate tokens, but quran.com
+    // does not — so merging keeps the word count aligned with audio units.
+    const words: string[] = [];
+    for (const token of rawTokens) {
+      if (this.isStandaloneWaqfMark(token) && words.length > 0) {
+        // Attach to previous word
+        words[words.length - 1] += ' ' + token;
+      } else {
+        words.push(token);
+      }
+    }
+
     this.verseWordsCache.set(verse.number, words);
     return words;
   }
 
+  // Strip all diacritics/marks, keep only base Arabic letters + Alif Wasla
+  private normalizeForMatch(text: string): string {
+    return text
+      .replace(/[\u064B-\u065F\u0670\u06D6-\u06ED\u06DF-\u06E4\u06E7-\u06E8\u06EA-\u06EC\u0615-\u061A\u0640]/g, '')
+      .replace(/[\u0622\u0623\u0625\u0671]/g, '\u0627')  // أ إ آ ٱ → ا
+      .replace(/\u0649/g, '\u064A')                       // ى → ي
+      .replace(/\u0629/g, '\u0647')                       // ة → ه
+      .replace(/[^\u0621-\u063A\u0641-\u064A]/g, '')
+      .trim();
+  }
+
+  // Check if two normalized words are close enough to match
+  private fuzzyMatch(a: string, b: string): boolean {
+    if (a === b) return true;
+    if (!a || !b) return false;
+    // One contains the other
+    if (a.startsWith(b) || a.endsWith(b) || b.startsWith(a) || b.endsWith(a)) return true;
+    // Check character overlap >= 60%
+    const longer = a.length >= b.length ? a : b;
+    const shorter = a.length >= b.length ? b : a;
+    let matches = 0;
+    const used = new Array(longer.length).fill(false);
+    for (const ch of shorter) {
+      const pos = longer.indexOf(ch, 0);
+      for (let k = 0; k < longer.length; k++) {
+        if (!used[k] && longer[k] === ch) { used[k] = true; matches++; break; }
+      }
+    }
+    return matches / longer.length >= 0.6;
+  }
+
+  // Build a mapping between display word indices and audio unit indices
+  // using normalized text matching with look-ahead on mismatch
+  private alignWords(
+    displayWords: string[],
+    audioUnits: Array<{ text: string; audioUrl: string }>
+  ): { displayToAudio: Map<number, number>; audioToDisplay: Map<number, number> } {
+    const displayToAudio = new Map<number, number>();
+    const audioToDisplay = new Map<number, number>();
+
+    // Pre-normalize all words
+    const normDisplayArr = displayWords.map(w => this.normalizeForMatch(w));
+    const normAudioArr = audioUnits.map(u => this.normalizeForMatch(u.text));
+
+    let audioIdx = 0;
+    const LOOK_AHEAD = 3;
+
+    for (let dIdx = 0; dIdx < displayWords.length; dIdx++) {
+      const normDisplay = normDisplayArr[dIdx];
+      if (!normDisplay) continue; // skip pure marks (no letters)
+      if (audioIdx >= audioUnits.length) break;
+
+      const normAudio = normAudioArr[audioIdx];
+
+      if (normDisplay === normAudio || this.fuzzyMatch(normDisplay, normAudio)) {
+        // Direct or fuzzy match
+        displayToAudio.set(dIdx, audioIdx);
+        audioToDisplay.set(audioIdx, dIdx);
+        audioIdx++;
+      } else {
+        // Look ahead in audio array for a match
+        let found = false;
+        for (let ahead = 1; ahead <= LOOK_AHEAD && audioIdx + ahead < audioUnits.length; ahead++) {
+          if (normDisplay === normAudioArr[audioIdx + ahead] || this.fuzzyMatch(normDisplay, normAudioArr[audioIdx + ahead])) {
+            // Skip unmatched audio units and jump to the match
+            audioIdx = audioIdx + ahead;
+            displayToAudio.set(dIdx, audioIdx);
+            audioToDisplay.set(audioIdx, dIdx);
+            audioIdx++;
+            found = true;
+            break;
+          }
+        }
+
+        if (!found) {
+          // Look ahead in display array — maybe the audio word matches a future display word
+          // (display has an extra word the audio doesn't have). Don't advance audioIdx.
+          let displayAhead = false;
+          for (let ahead = 1; ahead <= LOOK_AHEAD && dIdx + ahead < displayWords.length; ahead++) {
+            const futureNorm = normDisplayArr[dIdx + ahead];
+            if (futureNorm && (futureNorm === normAudio || this.fuzzyMatch(futureNorm, normAudio))) {
+              displayAhead = true;
+              break;
+            }
+          }
+
+          if (displayAhead) {
+            // This display word has no audio counterpart — map to current audio but DON'T advance audioIdx
+            displayToAudio.set(dIdx, audioIdx);
+            // Don't set audioToDisplay so the real match gets it later
+          } else {
+            // True fallback: assign and advance
+            displayToAudio.set(dIdx, audioIdx);
+            if (!audioToDisplay.has(audioIdx)) {
+              audioToDisplay.set(audioIdx, dIdx);
+            }
+            audioIdx++;
+          }
+        }
+      }
+    }
+
+    return { displayToAudio, audioToDisplay };
+  }
+
   async pronounceWord(word: string, verse: Verse, wordIndex: number) {
     if (!word.trim()) return;
+
+    // If already playing, stop immediately (click-to-stop)
     if (this.wordPlaybackActive) {
       this.stopPlayback();
       return;
@@ -719,45 +869,78 @@ export class JuzReaderComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Direct index mapping: display word index -> audio unit index
-    const audioIdx = Math.min(wordIndex, wordAudioUnits.length - 1);
+    const displayWords = this.getVerseWords(verse);
 
+    let audioIdx: number;
+
+    if (displayWords.length === wordAudioUnits.length) {
+      // Counts match → direct 1:1 index
+      audioIdx = wordIndex;
+    } else {
+      // Counts differ → find best match by normalized text
+      const normClicked = this.normalizeForMatch(word);
+      let bestIdx = -1;
+
+      if (normClicked) {
+        const expectedPos = Math.round(wordIndex * (wordAudioUnits.length / displayWords.length));
+        let bestDist = Infinity;
+
+        for (let i = 0; i < wordAudioUnits.length; i++) {
+          const normAudio = this.normalizeForMatch(wordAudioUnits[i].text);
+          if (normAudio === normClicked || normAudio.includes(normClicked) || normClicked.includes(normAudio)) {
+            const dist = Math.abs(i - expectedPos);
+            if (dist < bestDist) {
+              bestDist = dist;
+              bestIdx = i;
+            }
+          }
+        }
+      }
+
+      audioIdx = bestIdx >= 0
+        ? bestIdx
+        : Math.round(wordIndex * (wordAudioUnits.length / displayWords.length));
+    }
+
+    // Clamp to valid range
+    audioIdx = Math.max(0, Math.min(audioIdx, wordAudioUnits.length - 1));
+
+    // Start continuous playback from clicked word through end of verse
     this.wordPlaybackActive = true;
     this.wordPlaybackAbort = false;
     this.currentPlayingVerse.set(verse.number);
-    this.currentPlayingWordIndex.set(audioIdx);
     this.isPlaying.set(true);
 
-    const unit = wordAudioUnits[audioIdx];
-    if (unit?.audioUrl) {
-      try { await this.playWordAudio(unit.audioUrl); } catch { /* skip */ }
+    for (let i = audioIdx; i < wordAudioUnits.length; i++) {
+      if (this.wordPlaybackAbort) break;
+
+      // Highlight the corresponding display word
+      let highlightIdx: number;
+      if (displayWords.length === wordAudioUnits.length) {
+        highlightIdx = i;
+      } else {
+        highlightIdx = Math.round(i * (displayWords.length / wordAudioUnits.length));
+        highlightIdx = Math.min(highlightIdx, displayWords.length - 1);
+      }
+      this.currentPlayingWordIndex.set(highlightIdx);
+
+      const unit = wordAudioUnits[i] as { text: string; audioUrl: string; fallbackUrl?: string };
+      if (unit?.audioUrl) {
+        try {
+          await this.playWordAudio(unit.audioUrl);
+        } catch {
+          // Primary URL failed — try fallback (API's original URL)
+          if (unit.fallbackUrl && unit.fallbackUrl !== unit.audioUrl) {
+            try { await this.playWordAudio(unit.fallbackUrl); } catch { /* skip */ }
+          }
+        }
+      }
     }
 
     this.wordPlaybackActive = false;
     this.isPlaying.set(false);
     this.currentPlayingVerse.set(null);
     this.currentPlayingWordIndex.set(null);
-  }
-
-  private findAudioStartIndex(
-    clickedWord: string,
-    clickedDisplayIndex: number,
-    units: Array<{ text: string; audioUrl: string }>
-  ): number {
-    if (!units.length) return 0;
-    const normClicked = this.normalizeArabicWord(clickedWord);
-    const exactMatches: number[] = [];
-    for (let i = 0; i < units.length; i++) {
-      if (this.normalizeArabicWord(units[i].text) === normClicked) {
-        exactMatches.push(i);
-      }
-    }
-    if (exactMatches.length) {
-      return exactMatches.reduce((best, curr) =>
-        Math.abs(curr - clickedDisplayIndex) < Math.abs(best - clickedDisplayIndex) ? curr : best
-      );
-    }
-    return Math.min(clickedDisplayIndex, units.length - 1);
   }
 
   private playWordAudio(audioUrl: string): Promise<void> {
@@ -820,6 +1003,25 @@ export class JuzReaderComponent implements OnInit, OnDestroy {
       return updated;
     });
     this.triggerToast('تم إزالة العلامة المرجعية');
+  }
+
+  jumpToBookmark(b: SavedBookmark) {
+    const idx = this.verses().findIndex(v => v.number === b.verseNumber);
+    if (idx !== -1) {
+      if (this.readingMode() === 'mushaf') {
+        const v = this.verses()[idx];
+        if (v.pageNumber) this.mushafCurrentPage.set(v.pageNumber);
+      } else {
+        this.goToVerse(idx);
+        setTimeout(() => {
+          const el = document.getElementById(`verse-${b.verseNumber}`);
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+      }
+      this.showBookmarksPanel.set(false);
+    } else {
+      this.triggerToast('هذه الآية موجودة في جزء آخر');
+    }
   }
 
   isBookmarked(verseNumber: number): boolean {
@@ -1174,6 +1376,9 @@ export class JuzReaderComponent implements OnInit, OnDestroy {
   private normalizeArabicWord(value: string): string {
     return value
       .replace(/[\u064B-\u065F\u0670]/g, '')
+      .replace(/[\u0622\u0623\u0625\u0671]/g, '\u0627')  // أ إ آ ٱ → ا
+      .replace(/\u0649/g, '\u064A')                       // ى → ي
+      .replace(/\u0629/g, '\u0647')                       // ة → ه
       .replace(/[^\u0621-\u063A\u0641-\u064A]/g, '')
       .trim();
   }
@@ -1197,9 +1402,31 @@ export class JuzReaderComponent implements OnInit, OnDestroy {
       const payload = await response.json() as {
         verse?: { words?: Array<{ char_type_name?: string; audio_url?: string | null; text_uthmani?: string }>; };
       };
-      const units = (payload.verse?.words ?? [])
-        .filter((w) => w.char_type_name === 'word' && !!w.audio_url)
-        .map((w) => ({ text: w.text_uthmani ?? '', audioUrl: `https://verses.quran.com/${w.audio_url as string}` }));
+
+      // Filter to only actual words (not end markers)
+      const wordEntries = (payload.verse?.words ?? [])
+        .filter((w) => w.char_type_name === 'word' && !!w.audio_url);
+
+      // Build sequential audio URLs.
+      // The CDN files are numbered sequentially (001, 002, 003...) for words only,
+      // but the API's audio_url uses position numbers that include gaps for Waqf marks.
+      // So we construct the correct sequential URL ourselves:
+      //   wbw/{surah3}_{ayah3}_{seq3}.mp3
+      const surahPad = String(verse.surahNumber).padStart(3, '0');
+      const ayahPad = String(verse.numberInSurah).padStart(3, '0');
+
+      const units = wordEntries.map((w, idx) => {
+        const seqPad = String(idx + 1).padStart(3, '0');
+        const seqUrl = `https://verses.quran.com/wbw/${surahPad}_${ayahPad}_${seqPad}.mp3`;
+        // Keep the API URL as fallback
+        const apiUrl = `https://verses.quran.com/${w.audio_url as string}`;
+        return {
+          text: w.text_uthmani ?? '',
+          audioUrl: seqUrl,
+          fallbackUrl: apiUrl
+        };
+      });
+
       this.verseWordAudioCache.set(verse.number, units);
       return units;
     } catch { return []; }

@@ -13,187 +13,311 @@
     <div class="absolute inset-0 islamic-pattern-dense opacity-15 dark:opacity-[0.03] pointer-events-none"></div>
 
     <div class="relative max-w-5xl mx-auto px-5 md:px-6 py-8 md:py-10">
-        <section class="mb-8 animate-fade-in">
-            <div
-                class="bg-surface border border-brd/60 rounded-[1.8rem] p-6 md:p-8 shadow-sm hover:shadow-lg transition-all duration-500 hover:border-brd relative overflow-hidden group">
+        <section class="mb-8 md:mb-12 animate-fade-in relative z-10">
+            <!-- Elegant Header -->
+            <div class="text-center py-6 md:py-10">
                 <div
-                    class="absolute inset-0 bg-gradient-to-br from-primary/[0.02] to-accent/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 border border-primary/10 text-primary text-[10px] font-bold mb-4 animate-fade-in-up">
+                    <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                    <span>اليوم: {{todayLabel}}</span>
                 </div>
-                <div class="relative z-10">
-                    <p
-                        class="inline-flex text-[11px] font-bold px-3.5 py-1.5 rounded-full bg-primary/[0.08] text-primary mb-4 border border-primary/20 backdrop-blur-sm">
-                        موسم الطاعة</p>
-                    <h1 class="text-3xl md:text-5xl font-black text-txt mb-2 tracking-tight">رمضانيات</h1>
-                    <p class="text-sm md:text-base text-txt-secondary mb-2 font-medium">أدعية • أذكار • ختمة • أعمال
-                        يومية • العشر الأواخر</p>
+
+                <h1 class="text-4xl md:text-6xl font-black text-txt mb-3 tracking-tight">رمضانيات</h1>
+                <p class="text-txt-secondary text-base md:text-lg max-w-lg mx-auto leading-relaxed">
+                    مساحتك الروحانية اليومية في شهر الخير. تابع وردك، أذكارك، وختمتك في مكان واحد.
+                </p>
+            </div>
+
+            <!-- Unified Sticky Navigation (Capsule Style) -->
+            <div class="sticky top-[70px] z-30 transition-all duration-300">
+                <div class="overflow-x-auto pb-2 -mx-5 px-5 md:mx-0 md:px-0 no-scrollbar flex justify-center">
                     <div
-                        class="inline-flex items-center gap-2 text-xs text-txt-muted mb-6 bg-surface-el px-3 py-1.5 rounded-lg border border-brd/50">
-                        <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-                        <span>اليوم: {{todayLabel}}</span>
-                    </div>
-
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5">
-                        @for (item of quickActions; track item.label) {
-                        <button type="button" (click)="scrollToSection(item.target)"
-                            class="group/btn relative text-center px-4 py-3 rounded-xl border border-brd bg-surface-el text-xs font-bold text-txt hover:border-primary/40 hover:text-primary transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 overflow-hidden">
-                            <span
-                                class="absolute inset-0 bg-gradient-to-r from-primary/5 to-accent/5 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></span>
-                            <span class="relative">{{item.label}}</span>
+                        class="flex items-center gap-1 p-1.5 bg-surface/90 backdrop-blur-xl border border-brd/60 rounded-full shadow-lg shadow-primary/5 min-w-max">
+                        <button (click)="scrollToSection('today')"
+                            class="px-4 py-2 rounded-full text-xs font-bold text-txt hover:bg-surface-el hover:text-primary transition-all focus:bg-primary focus:text-white">
+                            ✨ مختارات اليوم
                         </button>
-                        }
+                        <button (click)="scrollToSection('ward-todo')"
+                            class="px-4 py-2 rounded-full text-xs font-bold text-txt hover:bg-surface-el hover:text-primary transition-all focus:bg-primary focus:text-white">
+                            ✅ مهام الورد
+                        </button>
+                        <button (click)="scrollToSection('duas')"
+                            class="px-4 py-2 rounded-full text-xs font-bold text-txt hover:bg-surface-el hover:text-primary transition-all focus:bg-primary focus:text-white">
+                            🤲 الأدعية
+                        </button>
+                        <button (click)="scrollToSection('adhkar')"
+                            class="px-4 py-2 rounded-full text-xs font-bold text-txt hover:bg-surface-el hover:text-primary transition-all focus:bg-primary focus:text-white">
+                            📿 السبحة
+                        </button>
+                        <button (click)="scrollToSection('khatma')"
+                            class="px-4 py-2 rounded-full text-xs font-bold text-txt hover:bg-surface-el hover:text-primary transition-all focus:bg-primary focus:text-white">
+                            📖 الختمة
+                        </button>
+                        <button (click)="scrollToSection('fiqh')"
+                            class="px-4 py-2 rounded-full text-xs font-bold text-txt hover:bg-surface-el hover:text-primary transition-all focus:bg-primary focus:text-white">
+                            💡 فقه الصيام
+                        </button>
+                        <button (click)="scrollToSection('last10')"
+                            class="px-4 py-2 rounded-full text-xs font-bold text-txt hover:bg-surface-el hover:text-primary transition-all focus:bg-primary focus:text-white">
+                            🌙 العشر الأواخر
+                        </button>
+                        <button (click)="scrollToSection('library')"
+                            class="px-4 py-2 rounded-full text-xs font-bold text-txt hover:bg-surface-el hover:text-primary transition-all focus:bg-primary focus:text-white">
+                            📚 المكتبة
+                        </button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="mb-8">
-            <div
-                class="sticky top-[68px] md:top-[78px] z-20 bg-bg/90 backdrop-blur-xl border border-brd/60 rounded-2xl p-3.5 shadow-lg animate-slide-down">
-                <div class="flex flex-wrap gap-2 text-[11px] font-bold">
-                    <button type="button" (click)="scrollToSection('today')" class="toc-link">مختارات اليوم</button>
-                    <button type="button" (click)="scrollToSection('ward-todo')" class="toc-link">مهام الورد</button>
-                    <button type="button" (click)="scrollToSection('duas')" class="toc-link">الأدعية</button>
-                    <button type="button" (click)="scrollToSection('adhkar')" class="toc-link">الأذكار + السبحة</button>
-                    <button type="button" (click)="scrollToSection('khatma')" class="toc-link">الختمة</button>
-                    <button type="button" (click)="scrollToSection('fiqh')" class="toc-link">فقه الصيام</button>
-                    <button type="button" (click)="scrollToSection('last10')" class="toc-link">العشر الأواخر</button>
-                    <button type="button" (click)="scrollToSection('library')" class="toc-link">المكتبة</button>
-                </div>
-            </div>
-        </section>
-
-        <section id="today" class="mb-10 scroll-mt-32">
-            <div class="flex items-center justify-between mb-5">
-                <h2 class="text-xl md:text-2xl font-black flex items-center gap-2">
-                    <span class="w-1 h-7 bg-gradient-to-b from-primary to-accent rounded-full"></span>
+        <section id="today" class="mb-12 scroll-mt-32">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl md:text-3xl font-black flex items-center gap-3 text-txt">
+                    <span class="text-2xl">✨</span>
                     مختارات اليوم
                 </h2>
-                <button (click)="refreshDailyContent()" class="share-btn group">
-                    <span class="group-hover:rotate-180 inline-block transition-transform duration-500">↻</span>
-                    <span class="mr-1">تحديث المختارات</span>
+                <button (click)="refreshDailyContent()"
+                    class="group flex items-center gap-2 px-4 py-2 rounded-full bg-surface border border-brd hover:border-primary/50 transition-all text-xs font-bold text-txt-secondary hover:text-primary">
+                    <span class="group-hover:rotate-180 transition-transform duration-500 text-sm">↻</span>
+                    <span>تحديث المختارات</span>
                 </button>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div
-                    class="bg-surface border border-brd rounded-2xl p-5 hover:shadow-lg hover:border-primary/30 transition-all duration-300 group">
-                    <div class="flex items-center justify-between mb-2">
-                        <p class="text-[11px] text-txt-muted font-bold">{{todayDua.title}}</p>
-                        <span
-                            class="w-2 h-2 rounded-full bg-primary/60 group-hover:scale-125 transition-transform"></span>
-                    </div>
-                    <p class="font-quran text-lg leading-[2.2] text-txt mb-4">{{todayDua.text}}</p>
-                    <button (click)="copyText(todayDua.text, todayDua.id)" class="copy-btn w-full md:w-auto">
-                        {{copiedKey === todayDua.id ? '✓ تم النسخ' : 'نسخ'}}
-                    </button>
-                </div>
 
-                <div
-                    class="bg-surface border border-brd rounded-2xl p-5 hover:shadow-lg hover:border-primary/30 transition-all duration-300 group">
-                    <div class="flex items-center justify-between mb-2">
-                        <p class="text-[11px] text-txt-muted font-bold">{{todayDhikr.title}}</p>
-                        <span
-                            class="w-2 h-2 rounded-full bg-accent/60 group-hover:scale-125 transition-transform"></span>
-                    </div>
-                    <p class="font-quran text-lg leading-[2.2] text-txt mb-4">{{todayDhikr.text}}</p>
-                    <button (click)="copyText(todayDhikr.text, todayDhikr.id)" class="copy-btn w-full md:w-auto">
-                        {{copiedKey === todayDhikr.id ? '✓ تم النسخ' : 'نسخ'}}
-                    </button>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
+                <!-- دعاء اليوم -->
                 <div
-                    class="bg-gradient-to-br from-surface via-surface to-primary/[0.02] border border-brd rounded-2xl p-5 hover:shadow-lg transition-all duration-300 md:col-span-2">
-                    <div class="flex items-center gap-2 mb-3">
-                        <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                            <span class="text-primary text-lg">📖</span>
+                    class="bg-surface border border-brd rounded-3xl p-6 relative overflow-hidden group hover:shadow-lg hover:-translate-y-1 transition-all duration-300 md:col-span-2">
+                    <div
+                        class="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110">
+                    </div>
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between mb-4">
+                            <span
+                                class="px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-bold border border-primary/20">دعاء
+                                اليوم</span>
+                            <button (click)="copyText(todayDua.text, todayDua.id)"
+                                class="text-txt-muted hover:text-primary transition-colors text-xs font-bold flex items-center gap-1 bg-surface-el/50 px-2 py-1 rounded-lg">
+                                <span class="text-sm">📋</span> {{copiedKey === todayDua.id ? 'تم النسخ' : 'نسخ'}}
+                            </button>
                         </div>
-                        <p class="text-[11px] text-txt-muted font-bold">آية للتدبر</p>
+                        <p class="font-quran text-xl md:text-2xl leading-loose text-txt mb-2">{{todayDua.text}}</p>
                     </div>
-                    <p
-                        class="font-quran text-lg md:text-xl leading-[2.2] text-txt mb-3 border-r-2 border-primary/40 pr-4">
-                        {{todayReflection.ayah}}</p>
-                    <p class="text-sm text-txt-secondary leading-relaxed bg-surface-el/50 rounded-lg p-3">
-                        {{todayReflection.reflection}}</p>
                 </div>
 
+                <!-- ذكر اليوم -->
                 <div
-                    class="bg-surface border border-brd rounded-2xl p-5 hover:shadow-lg hover:border-accent/30 transition-all duration-300 md:col-span-2">
-                    <div class="flex items-center gap-2 mb-3">
-                        <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
-                            <span class="text-accent text-lg">✨</span>
-                        </div>
-                        <p class="text-[11px] text-txt-muted font-bold">{{todayAction.title}}</p>
+                    class="bg-surface border border-brd rounded-3xl p-6 relative overflow-hidden group hover:shadow-lg hover:-translate-y-1 transition-all duration-300 md:col-span-2">
+                    <div
+                        class="absolute top-0 left-0 w-24 h-24 bg-accent/5 rounded-br-full -ml-4 -mt-4 transition-transform group-hover:scale-110">
                     </div>
-                    <p class="text-sm text-txt leading-relaxed">{{todayAction.suggestion}}</p>
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between mb-4">
+                            <span
+                                class="px-3 py-1 rounded-full bg-accent/10 text-accent text-[10px] font-bold border border-accent/20">ذكر
+                                اليوم</span>
+                            <button (click)="copyText(todayDhikr.text, todayDhikr.id)"
+                                class="text-txt-muted hover:text-accent transition-colors text-xs font-bold flex items-center gap-1 bg-surface-el/50 px-2 py-1 rounded-lg">
+                                <span class="text-sm">📋</span> {{copiedKey === todayDhikr.id ? 'تم النسخ' : 'نسخ'}}
+                            </button>
+                        </div>
+                        <p class="font-quran text-xl md:text-2xl leading-loose text-txt mb-2">{{todayDhikr.text}}</p>
+                    </div>
                 </div>
+
+                <!-- آية للتدبر (Hero Card Style) -->
+                <div
+                    class="md:col-span-3 bg-gradient-to-br from-surface to-primary/[0.04] border border-brd rounded-3xl p-6 md:p-8 relative overflow-hidden group hover:shadow-xl transition-all duration-300">
+                    <div
+                        class="absolute right-0 top-0 opacity-[0.03] text-[10rem] font-quran leading-none -mr-10 -mt-10 pointer-events-none">
+                        Q</div>
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span
+                                class="w-8 h-8 rounded-xl bg-surface border border-brd flex items-center justify-center text-lg shadow-sm">📖</span>
+                            <h3 class="font-bold text-sm text-txt-secondary">آية وتدبر</h3>
+                        </div>
+                        <div class="flex flex-col md:flex-row gap-6 md:gap-10">
+                            <div class="flex-1">
+                                <p class="font-quran text-2xl md:text-3xl leading-[2.2] text-txt mb-4 relative">
+                                    <span class="absolute -right-4 top-0 text-primary/20 text-4xl">❝</span>
+                                    {{todayReflection.ayah}}
+                                    <span class="text-primary/20 text-4xl">❞</span>
+                                </p>
+                            </div>
+                            <div
+                                class="md:w-1/3 bg-surface/60 backdrop-blur-sm rounded-2xl p-4 border border-brd/50 self-start">
+                                <p class="text-xs font-bold text-primary mb-2">💡 وقفة تدبرية</p>
+                                <p class="text-sm text-txt-secondary leading-relaxed">{{todayReflection.reflection}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- عمل صالح -->
+                <div
+                    class="bg-gradient-to-br from-accent/[0.05] to-surface border border-accent/20 rounded-3xl p-6 flex flex-col justify-center relative overflow-hidden group hover:shadow-lg transition-all duration-300">
+                    <div
+                        class="absolute top-2 right-2 text-4xl opacity-10 rotate-12 group-hover:rotate-0 transition-transform duration-500">
+                        ✨</div>
+                    <div class="relative z-10 text-center">
+                        <p class="text-[10px] uppercase tracking-wider font-bold text-accent mb-2">عمل اليوم</p>
+                        <h3 class="font-bold text-lg text-txt mb-2">{{todayAction.title}}</h3>
+                        <p class="text-xs text-txt-muted">{{todayAction.suggestion}}</p>
+                        <button
+                            class="mt-4 w-full py-2 rounded-xl bg-surface border border-accent/20 text-accent text-xs font-bold hover:bg-accent hover:text-white transition-all">
+                            تم الإنجاز ✓
+                        </button>
+                    </div>
+                </div>
+
             </div>
         </section>
 
-        <section id="ward-todo" class="mb-10 scroll-mt-32">
-            <h2 class="text-xl md:text-2xl font-black mb-5 flex items-center gap-2">
-                <span class="w-1 h-7 bg-gradient-to-b from-primary to-accent rounded-full"></span>
-                مهام الورد اليومي
-            </h2>
-            <div
-                class="bg-surface border border-brd rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-lg transition-shadow duration-300">
-                <div class="grid grid-cols-3 gap-3 mb-5">
-                    <div class="ward-stat">
-                        <p class="ward-stat-num">{{wardDoneCount}}</p>
-                        <p class="ward-stat-label">منجز</p>
+        <section id="ward-todo" class="mb-12 scroll-mt-32">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl md:text-3xl font-black flex items-center gap-3 text-txt">
+                    <span class="text-2xl">✅</span>
+                    مهام الورد اليومي
+                </h2>
+                <button (click)="resetWardTodo()"
+                    class="group flex items-center gap-2 px-4 py-2 rounded-full bg-surface border border-brd hover:border-primary/50 transition-all text-xs font-bold text-txt-secondary hover:text-primary">
+                    <span class="group-hover:rotate-180 transition-transform duration-500 text-sm">↻</span>
+                    <span>إعادة تعيين</span>
+                </button>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-3 gap-3 md:gap-4 mb-6">
+                <div
+                    class="bg-surface border border-brd rounded-2xl p-4 text-center relative overflow-hidden group hover:shadow-md transition-all">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-b from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
                     </div>
-                    <div class="ward-stat">
-                        <p class="ward-stat-num">{{wardRemainingCount}}</p>
-                        <p class="ward-stat-label">متبقي</p>
-                    </div>
-                    <div class="ward-stat">
-                        <p class="ward-stat-num">{{wardProgress}}%</p>
-                        <p class="ward-stat-label">التقدم</p>
+                    <div class="relative z-10">
+                        <div class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center mx-auto mb-2">
+                            <span class="text-green-500 text-lg">✓</span>
+                        </div>
+                        <p class="text-2xl md:text-3xl font-black text-txt">{{wardDoneCount}}</p>
+                        <p class="text-[10px] font-bold text-txt-muted mt-1">تم إنجازه</p>
                     </div>
                 </div>
-
-                <div class="relative h-3 rounded-full bg-primary/[0.12] overflow-hidden mb-6">
+                <div
+                    class="bg-surface border border-brd rounded-2xl p-4 text-center relative overflow-hidden group hover:shadow-md transition-all">
                     <div
-                        class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer">
+                        class="absolute inset-0 bg-gradient-to-b from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
                     </div>
-                    <div class="h-full bg-gradient-to-r from-primary via-accent to-secondary transition-all duration-500 ease-out rounded-full relative overflow-hidden"
+                    <div class="relative z-10">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center mx-auto mb-2">
+                            <span class="text-amber-500 text-lg">◷</span>
+                        </div>
+                        <p class="text-2xl md:text-3xl font-black text-txt">{{wardRemainingCount}}</p>
+                        <p class="text-[10px] font-bold text-txt-muted mt-1">متبقي</p>
+                    </div>
+                </div>
+                <div
+                    class="bg-surface border border-brd rounded-2xl p-4 text-center relative overflow-hidden group hover:shadow-md transition-all">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                    </div>
+                    <div class="relative z-10">
+                        <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-2">
+                            <span class="text-primary text-lg font-black">%</span>
+                        </div>
+                        <p class="text-2xl md:text-3xl font-black text-txt">{{wardProgress}}</p>
+                        <p class="text-[10px] font-bold text-txt-muted mt-1">نسبة التقدم</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="bg-surface border border-brd rounded-2xl p-4 mb-6">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-bold text-txt-muted">تقدم الورد</span>
+                    <span class="text-xs font-black text-primary">{{wardProgress}}%</span>
+                </div>
+                <div class="relative h-3 rounded-full bg-primary/[0.08] overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-primary via-accent to-secondary transition-all duration-700 ease-out rounded-full relative overflow-hidden"
                         [style.width.%]="wardProgress">
                         <div
                             class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-slide">
                         </div>
                     </div>
                 </div>
+            </div>
 
+            <!-- Main Card -->
+            <div class="bg-surface border border-brd rounded-3xl p-5 md:p-6">
+
+                <!-- Quick Ideas -->
                 <div class="mb-5">
-                    <div class="flex items-center gap-2 mb-3">
-                        <span class="text-lg">💡</span>
-                        <p class="text-xs text-txt-muted font-bold">أفكار سريعة تضيفها بضغطة واحدة</p>
-                    </div>
+                    <p class="text-xs font-bold text-txt-muted mb-3 flex items-center gap-2">
+                        <span
+                            class="w-5 h-5 rounded-md bg-primary/10 flex items-center justify-center text-primary text-[10px]">💡</span>
+                        أفكار سريعة — اضغط لإضافتها
+                    </p>
                     <div class="flex flex-wrap gap-2">
                         @for (idea of suggestedWardIdeas; track idea) {
-                        <button type="button" (click)="addWardIdea(idea)" class="chip">{{idea}}</button>
+                        <button type="button" (click)="addWardIdea(idea)"
+                            class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-surface-el border border-brd/70 text-xs font-bold text-txt hover:border-primary/50 hover:text-primary hover:bg-primary/5 transition-all duration-200 hover:-translate-y-0.5">
+                            <span class="text-primary/60 text-[10px]">+</span>
+                            {{idea}}
+                        </button>
                         }
                     </div>
                 </div>
 
-                <div class="flex gap-2 mb-4">
-                    <input [(ngModel)]="newWardTask" type="text" placeholder="أضف مهمة ورد جديدة"
-                        class="flex-1 px-4 py-2.5 rounded-xl border border-brd bg-surface-el text-sm focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/10 transition-all">
-                    <button (click)="addWardTask()" class="copy-btn">إضافة</button>
+                <!-- Add Task Input -->
+                <div class="flex gap-2 mb-6">
+                    <div class="flex-1 relative">
+                        <input [(ngModel)]="newWardTask" type="text" placeholder="أضف مهمة ورد جديدة..."
+                            class="w-full px-4 py-3 rounded-2xl border border-brd bg-surface-el/50 text-sm font-medium focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-txt-muted/50"
+                            (keydown.enter)="addWardTask()">
+                    </div>
+                    <button (click)="addWardTask()"
+                        class="px-5 py-3 rounded-2xl bg-primary text-white text-xs font-bold hover:bg-primary/90 transition-all hover:shadow-lg hover:shadow-primary/20 active:scale-95">
+                        إضافة
+                    </button>
                 </div>
-                <button (click)="resetWardTodo()" class="share-btn mb-5">↻ إعادة المهام الافتراضية</button>
 
-                <div class="space-y-2.5">
+                <!-- Divider -->
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="h-px flex-1 bg-brd/50"></div>
+                    <span class="text-[10px] font-bold text-txt-muted">قائمة المهام</span>
+                    <div class="h-px flex-1 bg-brd/50"></div>
+                </div>
+
+                <!-- Task List -->
+                <div class="space-y-2">
                     @for (task of wardTodo; track task.id) {
-                    <div
-                        class="group flex items-center justify-between gap-3 p-3.5 rounded-xl border border-brd/70 bg-surface-el hover:border-primary/30 hover:bg-surface transition-all duration-200 hover:shadow-md">
+                    <div class="group flex items-center justify-between gap-3 p-4 rounded-2xl border transition-all duration-300 hover:shadow-md"
+                        [class]="task.done 
+                            ? 'bg-green-500/[0.03] border-green-500/20' 
+                            : 'bg-surface-el/30 border-brd/60 hover:border-primary/30 hover:bg-surface'">
                         <label class="flex items-center gap-3 flex-1 cursor-pointer">
-                            <input type="checkbox" [checked]="task.done" (change)="toggleWardTask(task.id)"
-                                class="w-4 h-4 accent-[var(--primary)] cursor-pointer transition-transform hover:scale-110">
-                            <span [class.line-through]="task.done" [class.text-txt-muted]="task.done"
-                                class="text-sm font-medium transition-all duration-200">{{task.title}}</span>
+                            <div class="relative flex items-center justify-center w-5 h-5 rounded-lg border-2 transition-all duration-300"
+                                [class]="task.done 
+                                    ? 'bg-green-500 border-green-500' 
+                                    : 'border-brd hover:border-primary'">
+                                <input type="checkbox" [checked]="task.done" (change)="toggleWardTask(task.id)"
+                                    class="absolute inset-0 opacity-0 cursor-pointer">
+                                @if (task.done) {
+                                <svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                    stroke-width="3">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                                }
+                            </div>
+                            <span class="text-sm font-medium transition-all duration-200"
+                                [class]="task.done ? 'line-through text-txt-muted' : 'text-txt'">
+                                {{task.title}}
+                            </span>
                         </label>
                         <button (click)="removeWardTask(task.id)"
-                            class="opacity-0 group-hover:opacity-100 text-xs text-err hover:underline transition-all duration-200 px-2 py-1 rounded hover:bg-err/10">
-                            حذف
+                            class="opacity-0 group-hover:opacity-100 w-8 h-8 rounded-lg flex items-center justify-center text-err/60 hover:text-err hover:bg-err/10 transition-all duration-200">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
                         </button>
                     </div>
                     }
