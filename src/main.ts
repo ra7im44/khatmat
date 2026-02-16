@@ -73,7 +73,7 @@ import { provideHttpClient } from '@angular/common/http';
       </header>
 
       <!-- ═══ MAIN ═══ -->
-      <main class="flex-1 pt-16 md:pt-[72px] pb-20 md:pb-0" dir="rtl">
+      <main class="flex-1 pt-16 md:pt-[72px] pb-28 md:pb-0" dir="rtl">
         <router-outlet></router-outlet>
       </main>
 
@@ -108,7 +108,7 @@ import { provideHttpClient } from '@angular/common/http';
       </nav>
 
       <!-- ═══ FOOTER ═══ -->
-      <footer class="relative mt-12 border-t border-brd/60 bg-surface/70 backdrop-blur-xl" dir="rtl">
+      <footer class="relative mt-12 mb-24 md:mb-0 border-t border-brd/60 bg-surface/70 backdrop-blur-xl" dir="rtl">
         <div class="absolute inset-0 islamic-pattern-dense opacity-20 dark:opacity-[0.04] pointer-events-none"></div>
         <div class="relative max-w-7xl mx-auto px-6 md:px-8 py-8 md:py-10">
           <div class="flex flex-col md:flex-row items-center justify-between gap-6">

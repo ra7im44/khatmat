@@ -9,9 +9,9 @@
     </div>
     <div class="absolute inset-0 islamic-pattern-dense opacity-15 dark:opacity-[0.02] pointer-events-none"></div>
 
-    <div class="relative max-w-3xl mx-auto px-6 py-10">
+    <div class="relative max-w-3xl mx-auto px-4 md:px-6 py-4 md:py-10">
         <!-- Header -->
-        <div class="text-center mb-10 animate-fade-down">
+        <div class="text-center mb-4 md:mb-10 animate-fade-down">
             <div
                 class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-info/[0.06] border border-info/10 text-info text-[11px] font-bold mb-4 uppercase tracking-wider">
                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -28,9 +28,9 @@
         <div class="space-y-5 mb-8" #chatContainer>
             @if (messages().length === 0) {
             <!-- Welcome State -->
-            <div class="text-center py-16 animate-scale-in">
+            <div class="text-center py-6 md:py-16 animate-scale-in">
                 <div
-                    class="w-24 h-24 rounded-[2rem] bg-gradient-to-br from-info/10 to-primary/10 flex items-center justify-center mx-auto mb-6 animate-float-slow">
+                    class="w-16 h-16 md:w-24 md:h-24 rounded-2xl md:rounded-[2rem] bg-gradient-to-br from-info/10 to-primary/10 flex items-center justify-center mx-auto mb-4 md:mb-6 animate-float-slow">
                     <svg class="w-10 h-10 text-info" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                         stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -159,7 +159,8 @@
                                                 stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-                                            </svg></div>
+                                            </svg>
+                                        </div>
                                         <div><span class="font-bold text-warn">{{m.word}}</span><span
                                                 class="text-txt-muted"> — {{m.description}}</span><span
                                                 class="inline-block mr-2 px-2 py-0.5 rounded-md bg-warn/10 text-warn text-[9px] font-bold">{{m.type}}</span>
@@ -186,7 +187,7 @@
         </div>
 
         <!-- Recording Controls -->
-        <div class="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-40">
+        <div class="fixed bottom-32 md:bottom-8 left-1/2 -translate-x-1/2 z-40">
             <div
                 class="bg-surface/90 backdrop-blur-2xl border border-brd/60 rounded-2xl shadow-2xl p-4 flex items-center gap-4">
                 @if (!isRecording()) {

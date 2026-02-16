@@ -1844,3 +1844,155 @@
   border-top: 1px dashed color-mix(in srgb, var(--brd) 50%, transparent);
   padding-top: 0.5rem;
 }
+
+/* ══════════════════════════════════════
+   VOTD FLOATING TOAST NOTIFICATION
+   ══════════════════════════════════════ */
+
+.votd-toast {
+  position: fixed;
+  top: 5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  width: calc(100% - 2rem);
+  max-width: 480px;
+  animation: votdSlideDown 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes votdSlideDown {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.votd-toast-inner {
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--primary) 30%, var(--brd));
+  border-radius: 1.2rem;
+  padding: 0.8rem 1rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(20px);
+}
+
+.votd-toast-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.votd-toast-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.votd-toast-title {
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.votd-toast-close {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  color: var(--txt-muted);
+  background: color-mix(in srgb, var(--surface-el) 70%, transparent);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.votd-toast-close:hover {
+  background: color-mix(in srgb, var(--err) 10%, transparent);
+  color: var(--err);
+}
+
+.votd-toast-text {
+  font-size: 0.9rem;
+  line-height: 2.2;
+  color: var(--txt);
+  text-align: center;
+  margin-bottom: 0.3rem;
+}
+
+.votd-toast-ref {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--primary);
+  text-align: center;
+}
+
+/* ══════════════════════════════════════
+   VERSE INLINE ACTIONS (continuous mode)
+   ══════════════════════════════════════ */
+
+.verse-actions-inline {
+  display: none;
+  align-items: center;
+  gap: 0.2rem;
+  vertical-align: middle;
+  margin-inline-start: 0.3rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* Show on desktop only, on hover */
+@media (min-width: 768px) {
+  .verse-actions-inline {
+    display: inline-flex;
+  }
+
+  .quran-continuous-text:hover .verse-actions-inline,
+  .verse-actions-inline:hover {
+    opacity: 1;
+  }
+}
+
+.va-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 0.35rem;
+  border: 1px solid color-mix(in srgb, var(--brd) 40%, transparent);
+  background: color-mix(in srgb, var(--surface-el) 50%, transparent);
+  color: var(--txt-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  line-height: 1;
+}
+
+.va-btn:hover {
+  background: color-mix(in srgb, var(--primary) 10%, transparent);
+  color: var(--primary);
+  border-color: color-mix(in srgb, var(--primary) 30%, transparent);
+  transform: scale(1.1);
+}
+
+.va-btn.bookmarked {
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
+  color: var(--primary);
+  border-color: color-mix(in srgb, var(--primary) 30%, transparent);
+}
+
+.va-btn svg {
+  width: 11px;
+  height: 11px;
+}

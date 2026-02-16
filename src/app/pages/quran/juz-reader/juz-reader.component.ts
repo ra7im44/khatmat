@@ -194,6 +194,10 @@ export class JuzReaderComponent implements OnInit, OnDestroy {
   showToast = signal(false);
   toastMessage = signal('');
 
+  // ─── UI Drawers ───
+  showSettingsDrawer = signal(false);
+  showVotdPopup = signal(false);
+
   // ─── Caches ───
   private verseWordsCache = new Map<number, string[]>();
   private verseWordAudioCache = new Map<number, Array<{ text: string; audioUrl: string }>>();
